@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BitBay Alarm</string>
+    <string name="action_settings">Ustawienia</string>
+
+    <string name="BTC">BTC</string>
+    <string name="BCC">BCC</string>
+    <string name="LTC">LTC</string>
+    <string name="ETH">ETH</string>
+    <string name="LSK">LSK</string>
+    <string name="DASH">DASH</string>
+    <string name="GAME">GAME</string>
+    <string name="XMR">XMR</string>
+    <string name="ZEC">ZEC</string>
+    <string name="PLN">PLN</string>
+    <string name="EUR">EUR</string>
+    <string name="USD">USD</string>
+
+    <string name="App">App</string>
+
+
+    <string name="dash">&#8211;</string>
+    <string name="percent">%</string>
+
+    <string name="Exchange_rate">Kurs</string>
+    <string name="Refresh">Odśwież</string>
+    <string name="Updated">Zaktualizowano:</string>
+    <string name="Last">Ostatnia</string>
+    <string name="Volume">Wolumen</string>
+    <string name="Max24h">Max(24h)</string>
+    <string name="Min24h">Min(24h)</string>
+
+    <string name="Investment_amount">Kwota inwestycyjna:</string>
+    <string name="Purchase_rate">Kurs kupna:</string>
+    <string name="Sell_rate">Kurs sprzedaży:</string>
+    <string name="Transaction_provision">Prowizja transakcji:</string>
+    <string name="Count">Oblicz</string>
+    <string name="You_will_receive">Otrzymasz</string>
+    <string name="Profit">Zysk</string>
+    <string name="No_lose_exchange_rate">Bezstratny kurs sprzedaży</string>
+    <string name="default_provision_value">0.42</string>
+
+    <string name="default_alarm_id">Alarm 1</string>
+    <string name="Alarm_title">Alarm</string>
+    <string name="default_BTC_exchange_rate">Kurs BTC:</string>
+    <string name="BTC_PLN_exchange_rate">Kurs BTC - PLN</string>
+
+    <string name="Alarm_type">Typ alarmu:</string>
+    <string name="Cryptoccurrency">Kryptowaluta:</string>
+    <string name="Currency">Waluta:</string>
+    <string name="Limit_value">Wartość ograniczenia:</string>
+    <string name="Refresh_every_30_3600">Odświeżaj co(30-3600sek):</string>
+    <string name="default_refresh_value">10</string>
+    <string name="sec">sek</string>
+    <string name="Alarm_sound">Dźwięk alarmu:</string>
+    <string name="alarm_sound_default">default</string>
+    <string name="Choose_alarm_sound">Wybierz dźwięk</string>
+    <string name="Save_and_exit">Zapisz i wyjdź</string>
+
+    <string name="Turn_of_the_alarm">Wyłącz alarm</string>
+    <string name="Exchange_rate_title">Kurs</string>
+    <string name="has_fallen_below">spadł poniżej</string>
+    <string name="has_risen_above">wzrósł powyżej</string>
+    <string name="will_rise_above">wzrośnie powyżej:</string>
+    <string name="will_fall_below">spadnie poniżej</string>
+
+    <string name="Correct_input">Popraw dane wejściowe!</string>
+    <string name="Turn_on_the_internet">Włącz internet!</string>
+    <string name="Will_rise_above">Gdy wzrośnie powyżej</string>
+    <string name="Will_fall_below">Gdy spadnie poniżej</string>
+    <string name="Track_exchange_rate">Śledź kurs waluty</string>
+    <string name="track_exchange">Śledź kurs</string>
+
+    <string name="Saved_succesfully">Zapisano pomyślnie!</string>
+    <string name="Set_read_external_storage_permission">Przyznaj uprawnienia odczytu z pamięci!</string>
+    <string name="Click_to_turn_off">Kliknij, aby wyłączyć</string>
+
+    <string name="Alarm_has_been_closed">Alarm został wyłączony</string>
+    <string name="Alarms">Alarmy</string>
+    <string name="Calculator">Kalkulator</string>
+    <string name="Type">Typ:</string>
+
+    <string name="Choose_different_currency">Wybierz inną walutę!</string>
+    <string name="Cryptocurrency_must_be_different_than_currency">Kryptowaluta musi być różna od waluty!</string>
+    <string name="Fill_empty_fields">Uzupełnij puste pola!</string>
+
+    <string name="calc2Instruction">Oblicz po jakim kursie sprzedać kryptowalutę zakupioną po określonym kursie kupna, aby wypracować zadany zysk.</string>
+    <string name="XIN">XIN</string>
+    <string name="XRP">XRP</string>
+    <string name="KZC">KZC</string>
+    <string name="calculator1">"Kalkulator 1 "</string>
+    <string name="calculator2">Kalkulator 2</string>
+    <string name="use_different_app_to_play_song">Użyj innej aplikacji do wyboru piosenki!</string>
+    <string name="iWantToEarn">Zakładany zysk:</string>
+    <string name="alarmNotificationRefreshed">Odświeżono</string>
+    <string name="currency_not_supported">Waluta nie obsługiwana dla danej kryptowaluty!</string>
+    <string name="Add_alarm">Dodaj alarm</string>
+    <string name="Alarms_are_running">Alarmy pracują...</string>
+    <string name="Edit_alarm">Edytuj alarm</string>
+    <string name="add_widget">Dodaj widget</string>
+    <string name="Turn_off">Wyłącz</string>
+    <string name="Turn_off_the_alarm">Wyłącz alarm</string>
+    <string name="Turn_off_the_alarm_to_edit">Wyłącz alarm, aby go edytować!</string>
+    <string name="Turn_off_the_alarm_to_delete">Wyłącz alarm, aby go usunąć!</string>
+    <string name="min">min</string>
+    <string name="Sell_rate_title">Kurs sprzedaży:</string>
+    <string name="Vibration_alarm">Alarm wibracyjny</string>
+    <string name="IWantToEarn">Zakładany zysk:</string>
+    <string name="vibr">vibr</string>
+    <string name="BTG">BTG</string>
+    <string name="Attention">Uwaga!</string>
+    <string name="Track_exchange">Śledź kurs</string>
+    <string name="appwidget_text">appwidget</string>
+    <string name="Refresh_every">Odświeżaj co:</string>
+    <string name="Alarms_working">Alarmy pracują...</string>
+    <string name="Refreshed">Odświeżono</string>
+    <string name="calc1Instruction">Oblicz ile zarobisz kupując i sprzedając kryptowalutę po określonych kursach za określoną ilość pieniędzy.</string>
+    <string name="Widget_attention_text">Częstotliwość odświeżania widgetów jest wspólna dla wszystkich widgetów.</string>
+
+</resources>

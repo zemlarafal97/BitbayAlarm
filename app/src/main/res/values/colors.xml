@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#253749</color>
+    <color name="colorPrimaryDark">#232e3a</color>
+    <color name="colorAccent">#1976D2</color>
+
+
+
+    <color name="BTC">#ffb400</color>
+    <color name="BCC">#ff9639</color>
+    <color name="BTG">#000000</color>
+    <color name="LTC">#8c96ab</color>
+    <color name="ETH">#5b59a5</color>
+    <color name="LSK">#1170a4</color>
+    <color name="DASH">#1c75bc</color>
+    <color name="GAME">#98c01f</color>
+    <color name="XIN">#f66200</color>
+    <color name="XRP">#388eda</color>
+    <color name="KZC">#2685c5</color>
+
+    <color name="disabled">#78909C</color>
+
+    <color name="pln">#4CAF50</color>
+    <color name="eur">#795548</color>
+    <color name="usd">#f44336</color>
+
+</resources>

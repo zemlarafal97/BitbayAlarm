@@ -10,10 +10,6 @@ import android.view.ViewGroup;
 import com.example.bitbayalarm.R;
 
 
-/**
- * Created by Rafał on 17.02.2018.
- */
-
 public class Tab4Calculator extends Fragment {
 
 

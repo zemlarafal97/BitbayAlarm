@@ -12,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
 
     private PagerAdapter pagerAdapter;
     private TabLayout tabLayout;
-    public static ViewPager mViewPager;
+    private ViewPager mViewPager;
 
 
     @Override
@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        pagerAdapter = new PagerAdapter(getSupportFragmentManager(),4,this);
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager(), 4, this);
 
         mViewPager = findViewById(R.id.viewPager);
         mViewPager.setAdapter(pagerAdapter);
@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-
 
     }
 

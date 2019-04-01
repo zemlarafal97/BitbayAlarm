@@ -11,10 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bitbayalarm.R;
 import com.example.bitbayalarm.Resources;
-import com.example.bitbayalarm.calculators.Calculator;
+import com.example.bitbayalarm.other.Calculator;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -48,21 +49,11 @@ public class Tab3ProfitCalculator extends Fragment {
             @Override
             public void onClick(View v) {
 
-                double buyFor = Double.parseDouble(buyForValueET.getText().toString());
-                double buyRate = Double.parseDouble(buyExchangeRatingValueET.getText().toString());
-                double sellRate = Double.parseDouble(sellExchangeRatingValueET.getText().toString());
-                double provision = Double.parseDouble(dealProvisionValueET.getText().toString());
-
-                double youWillReceive = Calculator.calculateTotalProfit(buyFor, buyRate, sellRate, provision);
-                double noLossRate = Calculator.calculateNoLossRate(buyFor, buyRate, provision);
-
-
-                if (currencySpinner.getSelectedItem().toString().equals("BTC")) {
-                    showResultsInCards(youWillReceive, youWillReceive - buyFor, noLossRate);
-                } else {
-                    showResultsInCards(Math.round(youWillReceive * 100.0) / 100.0, Math.round((youWillReceive - buyFor) * 100.0) / 100.0, Math.round(noLossRate * 100.0) / 100.0);
+                try {
+                    calculateAndShowResults();
+                } catch (NumberFormatException e) {
+                    Toast.makeText(getActivity(), getString(R.string.Fill_empty_fields), Toast.LENGTH_SHORT).show();
                 }
-
 
             }
         });
@@ -113,6 +104,25 @@ public class Tab3ProfitCalculator extends Fragment {
         sb.append(String.valueOf(df.format(noLossRate)));
         sb.append(symbol);
         noLossRateValueTV.setText(sb);
+
+    }
+
+    private void calculateAndShowResults() {
+
+        double buyFor = Double.parseDouble(buyForValueET.getText().toString());
+        double buyRate = Double.parseDouble(buyExchangeRatingValueET.getText().toString());
+        double sellRate = Double.parseDouble(sellExchangeRatingValueET.getText().toString());
+        double provision = Double.parseDouble(dealProvisionValueET.getText().toString());
+
+        double youWillReceive = Calculator.calculateTotalProfit(buyFor, buyRate, sellRate, provision);
+        double noLossRate = Calculator.calculateNoLossRate(buyFor, buyRate, provision);
+
+
+        if (currencySpinner.getSelectedItem().toString().equals("BTC")) {
+            showResultsInCards(youWillReceive, youWillReceive - buyFor, noLossRate);
+        } else {
+            showResultsInCards(Math.round(youWillReceive * 100.0) / 100.0, Math.round((youWillReceive - buyFor) * 100.0) / 100.0, Math.round(noLossRate * 100.0) / 100.0);
+        }
 
     }
 

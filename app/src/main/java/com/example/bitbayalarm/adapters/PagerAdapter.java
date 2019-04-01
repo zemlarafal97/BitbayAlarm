@@ -1,10 +1,11 @@
-package com.example.bitbayalarm;
+package com.example.bitbayalarm.adapters;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.bitbayalarm.R;
 import com.example.bitbayalarm.fragments.Tab1ExchangeRate;
 import com.example.bitbayalarm.fragments.Tab2Alarms;
 import com.example.bitbayalarm.fragments.Tab3ProfitCalculator;

@@ -1,4 +1,4 @@
-package com.example.bitbayalarm.calculators;
+package com.example.bitbayalarm.other;
 
 public class Calculator {
 

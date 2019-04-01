@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/crypto_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shadow_btc"
+    android:orientation="vertical"
+    android:paddingLeft="24dp"
+    android:paddingTop="10dp"
+    android:paddingRight="24dp">
+
+    <ImageView
+        android:id="@+id/cryptoImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:contentDescription="@string/BTC"
+        android:src="@drawable/btc_icon_24dp" />
+
+    <TextView
+        android:id="@+id/cryptoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="2dp"
+        android:fontFamily="sans-serif-condensed"
+        android:paddingBottom="6dp"
+        android:text="@string/BTC"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+</LinearLayout>

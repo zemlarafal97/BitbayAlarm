@@ -1,7 +1,6 @@
 package com.example.bitbayalarm.fragments;
 
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,12 +11,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-
-import com.example.bitbayalarm.Configuration;
 import com.example.bitbayalarm.R;
-import com.example.bitbayalarm.calculators.ProfitCalculator;
+import com.example.bitbayalarm.Resources;
+import com.example.bitbayalarm.calculators.Calculator;
+
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 
 public class Tab3ProfitCalculator extends Fragment {
@@ -27,7 +28,7 @@ public class Tab3ProfitCalculator extends Fragment {
     private EditText sellExchangeRatingValueET;
     private EditText dealProvisionValueET;
 
-    private Button countProfitBtt;
+    private Button countBtt;
 
     private TextView youWillGainValueTV;
     private TextView profitValueTV;
@@ -43,7 +44,7 @@ public class Tab3ProfitCalculator extends Fragment {
         initializeViewElements(rootView);
 
 
-        countProfitBtt.setOnClickListener(new View.OnClickListener() {
+        countBtt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -52,17 +53,16 @@ public class Tab3ProfitCalculator extends Fragment {
                 double sellRate = Double.parseDouble(sellExchangeRatingValueET.getText().toString());
                 double provision = Double.parseDouble(dealProvisionValueET.getText().toString());
 
-                double profit = ProfitCalculator.calculateProfit(buyFor, buyRate, sellRate, provision);
-                double noLossRate = ProfitCalculator.calculateNoLossRate(buyFor, buyRate, provision);
+                double youWillReceive = Calculator.calculateTotalProfit(buyFor, buyRate, sellRate, provision);
+                double noLossRate = Calculator.calculateNoLossRate(buyFor, buyRate, provision);
 
-                /*
-                    Toast.makeText(getActivity(),String.valueOf(profit),Toast.LENGTH_SHORT).show();
-                    Toast.makeText(getActivity(),String.valueOf(noLossRate),Toast.LENGTH_SHORT).show();
-                */
 
-                youWillGainValueTV.setText(String.valueOf(buyFor + profit));
-                profitValueTV.setText(String.valueOf(profit));
-                noLossRateValueTV.setText(String.valueOf(noLossRate));
+                if (currencySpinner.getSelectedItem().toString().equals("BTC")) {
+                    showResultsInCards(youWillReceive, youWillReceive - buyFor, noLossRate);
+                } else {
+                    showResultsInCards(Math.round(youWillReceive * 100.0) / 100.0, Math.round((youWillReceive - buyFor) * 100.0) / 100.0, Math.round(noLossRate * 100.0) / 100.0);
+                }
+
 
             }
         });
@@ -76,16 +76,45 @@ public class Tab3ProfitCalculator extends Fragment {
         buyExchangeRatingValueET = rootView.findViewById(R.id.buyExchangeRatingValueET);
         sellExchangeRatingValueET = rootView.findViewById(R.id.sellExchangeRatingValueET);
         dealProvisionValueET = rootView.findViewById(R.id.dealProvisionValueET);
-        countProfitBtt = rootView.findViewById(R.id.countProfitBtt);
+        countBtt = rootView.findViewById(R.id.countProfitBtt);
         youWillGainValueTV = rootView.findViewById(R.id.youWillGainValueTV);
         profitValueTV = rootView.findViewById(R.id.profitValueTV);
         currencySpinner = rootView.findViewById(R.id.currencySpinner);
         noLossRateValueTV = rootView.findViewById(R.id.noLossRateValueTV);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, Configuration.getCurrencies());
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, Resources.getCurrencies());
         currencySpinner.setAdapter(adapter);
     }
 
+    private void showResultsInCards(double youWillReceive, double profit, double noLossRate) {
+
+        DecimalFormat df = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.US));
+        df.setMaximumFractionDigits(10);
+        String symbol = Resources.getCurrencySymbol(currencySpinner.getSelectedItem().toString());
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.valueOf(df.format(youWillReceive)));
+        sb.append(symbol);
+        youWillGainValueTV.setText(sb);
+
+        if (profit < 0.0) {
+            profitValueTV.setTextColor(getResources().getColor(R.color.negative));
+        } else {
+            profitValueTV.setTextColor(getResources().getColor(R.color.positive));
+        }
+
+        sb = new StringBuilder();
+        sb.append(String.valueOf(df.format(profit)));
+        sb.append(symbol);
+        profitValueTV.setText(sb);
+
+        sb = new StringBuilder();
+        sb.append(String.valueOf(df.format(noLossRate)));
+        sb.append(symbol);
+        noLossRateValueTV.setText(sb);
+
+    }
 
 
 }

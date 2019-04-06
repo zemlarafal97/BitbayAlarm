@@ -18,13 +18,10 @@ public class BitbayRequest {
 
     public static void makeBitbayTickerRequest(RequestQueue requestQueue, String cryptocurrencyCode, String currencyCode, final ServerCallback callback) {
 
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("https://bitbay.net/API/Public/");
-        stringBuilder.append(cryptocurrencyCode);
-        stringBuilder.append(currencyCode);
-        stringBuilder.append("/ticker.json");
 
-        String query = stringBuilder.toString();
+
+
+        String query = "https://bitbay.net/API/Public/" + cryptocurrencyCode + currencyCode + "/ticker.json";
 
 
         System.out.println(query);

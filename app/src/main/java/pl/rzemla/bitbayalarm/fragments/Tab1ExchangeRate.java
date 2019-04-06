@@ -8,9 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import pl.rzemla.bitbayalarm.BitbayRequest;
+import pl.rzemla.bitbayalarm.Resources;
 import pl.rzemla.bitbayalarm.interfaces.AdapterClicker;
 import pl.rzemla.bitbayalarm.interfaces.ServerCallback;
 import pl.rzemla.bitbayalarm.VolleySingleton;
@@ -23,9 +25,12 @@ import pl.rzemla.bitbayalarm.other.Bitbay;
 import pl.rzemla.bitbayalarm.other.Cryptocurrency;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedList;
+import java.util.Locale;
 
 
 public class Tab1ExchangeRate extends Fragment {
@@ -42,6 +47,19 @@ public class Tab1ExchangeRate extends Fragment {
     private TextView refreshTimeValueTV;
     private TextView exchangeDescrTV;
 
+    private LinearLayout plnLayout;
+    private LinearLayout eurLayout;
+    private LinearLayout usdLayout;
+    private LinearLayout btc2Layout;
+    private TextView plnTV;
+    private TextView usdTV;
+    private TextView eurTV;
+    private TextView btc2TV;
+
+    private String currentCryptocurrency = "BTC";
+    private String currentCurrency = "PLN";
+
+
     private RequestQueue mQueue;
 
     @Override
@@ -54,29 +72,27 @@ public class Tab1ExchangeRate extends Fragment {
 
         mQueue = VolleySingleton.getInstance(getActivity()).getRequestQueue();
 
-        refreshBtt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        setViewElementsClickListeners();
 
-                BitbayRequest.makeBitbayTickerRequest(mQueue, "BTC", "PLN", new ServerCallback() {
+        switch (currentCurrency) {
+            case "PLN":
+                setCurrencyClicked(plnTV);
+                break;
+            case "USD":
+                setCurrencyClicked(usdTV);
+                break;
+            case "BTC":
+                setCurrencyClicked(btc2TV);
+                break;
+            case "EUR":
+                setCurrencyClicked(eurTV);
+                break;
+            default:
+                setCurrencyClicked(plnTV);
+        }
 
-                    @Override
-                    public void onSuccess(Bitbay bitbay) {
-                        lastValueTV.setText(String.valueOf(bitbay.getLast()));
-                        minValueTV.setText(String.valueOf(bitbay.getMin24h()));
-                        maxValueTV.setText(String.valueOf(bitbay.getMax24h()));
-                        volumeValueTV.setText(String.valueOf(bitbay.getVolume()));
-                        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm:ss");
-                        String date = dateFormat.format(Calendar.getInstance().getTime());
-                        refreshTimeValueTV.setText(date);
 
-                    }
-                });
-
-
-            }
-        });
-
+        updateRatesViews();
 
         return rootView;
     }
@@ -89,6 +105,14 @@ public class Tab1ExchangeRate extends Fragment {
         minValueTV = rootView.findViewById(R.id.minValueTV);
         refreshTimeValueTV = rootView.findViewById(R.id.refreshTimeValueTV);
         exchangeDescrTV = rootView.findViewById(R.id.exchangeDescrTV);
+        plnLayout = rootView.findViewById(R.id.pln_layout);
+        eurLayout = rootView.findViewById(R.id.eur_layout);
+        usdLayout = rootView.findViewById(R.id.usd_layout);
+        btc2Layout = rootView.findViewById(R.id.btc_layout2);
+        plnTV = rootView.findViewById(R.id.plnTextView);
+        usdTV = rootView.findViewById(R.id.usdTextView);
+        eurTV = rootView.findViewById(R.id.eurTextView);
+        btc2TV = rootView.findViewById(R.id.btc2TextView);
     }
 
     private void initializeCryptocurrenciesRecyclerView(View rootView) {
@@ -116,11 +140,105 @@ public class Tab1ExchangeRate extends Fragment {
 
         mAdapter = new CryptocurrenciesAdapter(cryptocurrencyList, getActivity(), new AdapterClicker() {
             @Override
-            public void onClick(String cryptoname) {
-                System.out.println(cryptoname);
+            public void onClick(String cryptocurrency) {
+                currentCryptocurrency = cryptocurrency;
+                updateRatesViews();
             }
         });
         recyclerView.setAdapter(mAdapter);
+    }
+
+    private void setViewElementsClickListeners() {
+        refreshBtt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateRatesViews();
+            }
+        });
+
+        plnLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unclickCurrenciesLayouts();
+                setCurrencyClicked(plnTV);
+                currentCurrency = "PLN";
+            }
+        });
+
+        usdLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unclickCurrenciesLayouts();
+                setCurrencyClicked(usdTV);
+                currentCurrency = "USD";
+            }
+        });
+
+        eurLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unclickCurrenciesLayouts();
+                setCurrencyClicked(eurTV);
+                currentCurrency = "EUR";
+            }
+        });
+
+        btc2Layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                unclickCurrenciesLayouts();
+                setCurrencyClicked(btc2TV);
+                currentCurrency = "BTC";
+            }
+        });
+    }
+
+    private void updateRatesViews() {
+        if (currentCurrency != currentCryptocurrency) {
+            BitbayRequest.makeBitbayTickerRequest(mQueue, currentCryptocurrency, currentCurrency, new ServerCallback() {
+
+                @Override
+                public void onSuccess(Bitbay bitbay) {
+                    String currencySymbol = Resources.getCurrencySymbol(currentCurrency);
+                    DecimalFormat df = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.US));
+                    df.setMaximumFractionDigits(10);
+
+                    lastValueTV.setText(String.valueOf(df.format(bitbay.getLast()) + currencySymbol));
+                    maxValueTV.setText(String.valueOf(df.format(bitbay.getMax24h()) + currencySymbol));
+                    minValueTV.setText(String.valueOf(df.format(bitbay.getMin24h()) + currencySymbol));
+                    df.setMaximumFractionDigits(4);
+                    volumeValueTV.setText(String.valueOf(df.format(bitbay.getVolume())));
+                    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm:ss");
+                    String date = dateFormat.format(Calendar.getInstance().getTime());
+                    refreshTimeValueTV.setText(date);
+
+                    String stringBuilder = getString(R.string.Exchange_rate) +
+                            " " +
+                            currentCryptocurrency +
+                            " " +
+                            getString(R.string.dash) +
+                            " " +
+                            currentCurrency;
+                    exchangeDescrTV.setText(stringBuilder);
+
+
+                }
+            });
+        }
+    }
+
+    private void unclickCurrenciesLayouts() {
+        double dpToPx = getActivity().getResources().getDisplayMetrics().density;
+        plnTV.setPadding(0, 0, 0, (int) (dpToPx * 6));
+        usdTV.setPadding(0, 0, 0, (int) (dpToPx * 6));
+        eurTV.setPadding(0, 0, 0, (int) (dpToPx * 6));
+        btc2TV.setPadding(0, 0, 0, (int) (dpToPx * 6));
+    }
+
+    private void setCurrencyClicked(View view) {
+        double dpToPx = getActivity().getResources().getDisplayMetrics().density;
+        view.setPadding(0, 0, 0, (int) (dpToPx * 18));
+        updateRatesViews();
     }
 
 

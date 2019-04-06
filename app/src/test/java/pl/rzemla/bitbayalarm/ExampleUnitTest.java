@@ -1,4 +1,4 @@
-package com.example.bitbayalarm;
+package pl.rzemla.bitbayalarm;
 
 import org.junit.Test;
 

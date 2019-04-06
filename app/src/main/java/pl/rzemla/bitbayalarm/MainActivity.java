@@ -1,4 +1,4 @@
-package com.example.bitbayalarm;
+package pl.rzemla.bitbayalarm;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-import com.example.bitbayalarm.adapters.PagerAdapter;
+import com.example.bitbayalarm.R;
+
+import pl.rzemla.bitbayalarm.adapters.PagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 

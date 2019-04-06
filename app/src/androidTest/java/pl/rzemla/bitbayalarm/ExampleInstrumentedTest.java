@@ -1,4 +1,4 @@
-package com.example.bitbayalarm;
+package pl.rzemla.bitbayalarm;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

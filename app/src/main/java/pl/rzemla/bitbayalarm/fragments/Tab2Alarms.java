@@ -1,4 +1,4 @@
-package com.example.bitbayalarm.fragments;
+package pl.rzemla.bitbayalarm.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

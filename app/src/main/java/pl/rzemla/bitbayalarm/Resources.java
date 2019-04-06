@@ -1,4 +1,4 @@
-package com.example.bitbayalarm;
+package pl.rzemla.bitbayalarm;
 
 public class Resources {
 
@@ -22,8 +22,6 @@ public class Resources {
             default:
                 return "unknown";
         }
-
-
     }
 
 

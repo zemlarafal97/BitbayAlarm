@@ -1,4 +1,4 @@
-package com.example.bitbayalarm.other;
+package pl.rzemla.bitbayalarm.other;
 
 public class Bitbay {
     private double last;
@@ -37,5 +37,26 @@ public class Bitbay {
 
     public void setVolume(double volume) {
         this.volume = volume;
+    }
+
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("LAST: ");
+        stringBuilder.append(this.last);
+        stringBuilder.append("\n");
+        stringBuilder.append("MAX24H: ");
+        stringBuilder.append(this.max24h);
+        stringBuilder.append("\n");
+        stringBuilder.append("MIN24H: ");
+        stringBuilder.append(this.min24h);
+        stringBuilder.append("\n");
+        stringBuilder.append("VOLUME: ");
+        stringBuilder.append(this.volume);
+        stringBuilder.append("\n");
+
+
+        return stringBuilder.toString();
     }
 }

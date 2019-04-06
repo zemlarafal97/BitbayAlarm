@@ -1,4 +1,4 @@
-package com.example.bitbayalarm.other;
+package pl.rzemla.bitbayalarm.other;
 
 public class Calculator {
 

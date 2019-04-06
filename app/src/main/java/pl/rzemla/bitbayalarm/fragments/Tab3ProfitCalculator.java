@@ -1,4 +1,4 @@
-package com.example.bitbayalarm.fragments;
+package pl.rzemla.bitbayalarm.fragments;
 
 
 import android.os.Bundle;
@@ -14,8 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bitbayalarm.R;
-import com.example.bitbayalarm.Resources;
-import com.example.bitbayalarm.other.Calculator;
+import pl.rzemla.bitbayalarm.Resources;
+import pl.rzemla.bitbayalarm.other.Calculator;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;

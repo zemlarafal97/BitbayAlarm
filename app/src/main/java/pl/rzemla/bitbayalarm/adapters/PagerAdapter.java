@@ -1,4 +1,4 @@
-package com.example.bitbayalarm.adapters;
+package pl.rzemla.bitbayalarm.adapters;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -6,10 +6,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.bitbayalarm.R;
-import com.example.bitbayalarm.fragments.Tab1ExchangeRate;
-import com.example.bitbayalarm.fragments.Tab2Alarms;
-import com.example.bitbayalarm.fragments.Tab3ProfitCalculator;
-import com.example.bitbayalarm.fragments.Tab4Calculator;
+import pl.rzemla.bitbayalarm.fragments.Tab1ExchangeRate;
+import pl.rzemla.bitbayalarm.fragments.Tab2Alarms;
+import pl.rzemla.bitbayalarm.fragments.Tab3ProfitCalculator;
+import pl.rzemla.bitbayalarm.fragments.Tab4Calculator;
 
 public class PagerAdapter extends FragmentPagerAdapter {
 

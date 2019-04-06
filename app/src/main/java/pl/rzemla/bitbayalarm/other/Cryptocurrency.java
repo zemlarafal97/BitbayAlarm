@@ -1,15 +1,17 @@
-package com.example.bitbayalarm.other;
+package pl.rzemla.bitbayalarm.other;
 
 public class Cryptocurrency {
 
     private int layoutBackgroundRes;
     private int imageSourceRes;
     private String name;
+    private boolean clicked = false;
 
-    public Cryptocurrency(int layoutBackgroundRes, int imageSourceRes, String name) {
+    public Cryptocurrency(int layoutBackgroundRes, int imageSourceRes, String name, boolean clicked) {
         this.layoutBackgroundRes = layoutBackgroundRes;
         this.imageSourceRes = imageSourceRes;
         this.name = name;
+        this.clicked = clicked;
     }
 
     public int getLayoutBackgroundRes() {
@@ -34,5 +36,13 @@ public class Cryptocurrency {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isClicked() {
+        return clicked;
+    }
+
+    public void setClicked(boolean clicked) {
+        this.clicked = clicked;
     }
 }

@@ -23,6 +23,7 @@ public class CryptocurrenciesAdapter extends RecyclerView.Adapter<Cryptocurrenci
     private List<Cryptocurrency> cryptocurrenciesList;
     private Context mContext;
     private AdapterClicker adapterClicker;
+    private String currentCryptocurrencyClicked;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         LinearLayout cryptocurrencyLayout;
@@ -37,10 +38,11 @@ public class CryptocurrenciesAdapter extends RecyclerView.Adapter<Cryptocurrenci
         }
     }
 
-    public CryptocurrenciesAdapter(LinkedList<Cryptocurrency> cryptocurrenciesList, Context context, final AdapterClicker adapterClicker) {
+    public CryptocurrenciesAdapter(LinkedList<Cryptocurrency> cryptocurrenciesList, Context context, final AdapterClicker adapterClicker, String currentCryptocurrencyClicked) {
         this.cryptocurrenciesList = cryptocurrenciesList;
         this.mContext = context;
         this.adapterClicker = adapterClicker;
+        this.currentCryptocurrencyClicked = currentCryptocurrencyClicked;
     }
 
 
@@ -59,29 +61,27 @@ public class CryptocurrenciesAdapter extends RecyclerView.Adapter<Cryptocurrenci
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                for(Cryptocurrency c : cryptocurrenciesList) {
-                    c.setClicked(false);
-                }
-                cryptocurrenciesList.get(position).setClicked(true);
-                adapterClicker.onClick(cryptocurrenciesList.get(position).getName());
+                currentCryptocurrencyClicked = cryptocurrenciesList.get(holder.getAdapterPosition()).getName();
                 notifyDataSetChanged();
+                adapterClicker.onClick(currentCryptocurrencyClicked);
             }
         });
 
-        if(cryptocurrenciesList.get(position).isClicked()) {
+        if(cryptocurrency.getName().equals(currentCryptocurrencyClicked)) {
             holder.cryptocurrencyLayout.setBackgroundResource(cryptocurrency.getLayoutBackgroundRes());
             holder.cryptocurrencyNameTV.setText(cryptocurrenciesList.get(position).getName());
             holder.cryptocurrencyIV.setImageResource(cryptocurrenciesList.get(position).getImageSourceRes());
             double dpToPx = mContext.getResources().getDisplayMetrics().density;
-            holder.cryptocurrencyNameTV.setPadding(0,0,0,(int)(dpToPx*18));
+            holder.cryptocurrencyNameTV.setPadding(0, 0, 0, (int) (dpToPx * 18));
         } else {
             holder.cryptocurrencyLayout.setBackgroundResource(cryptocurrency.getLayoutBackgroundRes());
             holder.cryptocurrencyNameTV.setText(cryptocurrenciesList.get(position).getName());
             holder.cryptocurrencyIV.setImageResource(cryptocurrenciesList.get(position).getImageSourceRes());
             double dpToPx = mContext.getResources().getDisplayMetrics().density;
-            holder.cryptocurrencyNameTV.setPadding(0,0,0,(int)(dpToPx*6));
+            holder.cryptocurrencyNameTV.setPadding(0, 0, 0, (int) (dpToPx * 6));
         }
+
+
 
 
     }

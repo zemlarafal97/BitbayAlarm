@@ -5,13 +5,10 @@ public class Cryptocurrency {
     private int layoutBackgroundRes;
     private int imageSourceRes;
     private String name;
-    private boolean clicked = false;
-
-    public Cryptocurrency(int layoutBackgroundRes, int imageSourceRes, String name, boolean clicked) {
+    public Cryptocurrency(int layoutBackgroundRes, int imageSourceRes, String name) {
         this.layoutBackgroundRes = layoutBackgroundRes;
         this.imageSourceRes = imageSourceRes;
         this.name = name;
-        this.clicked = clicked;
     }
 
     public int getLayoutBackgroundRes() {
@@ -38,11 +35,4 @@ public class Cryptocurrency {
         this.name = name;
     }
 
-    public boolean isClicked() {
-        return clicked;
-    }
-
-    public void setClicked(boolean clicked) {
-        this.clicked = clicked;
-    }
 }

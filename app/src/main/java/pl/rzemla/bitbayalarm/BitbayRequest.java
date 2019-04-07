@@ -18,7 +18,12 @@ public class BitbayRequest {
 
     public static void makeBitbayTickerRequest(RequestQueue requestQueue, String cryptocurrencyCode, String currencyCode, final ServerCallback callback) {
 
-
+        requestQueue.cancelAll(new RequestQueue.RequestFilter() {
+            @Override
+            public boolean apply(Request<?> request) {
+                return true;
+            }
+        });
 
 
         String query = "https://bitbay.net/API/Public/" + cryptocurrencyCode + currencyCode + "/ticker.json";

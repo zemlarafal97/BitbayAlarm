@@ -1,4 +1,4 @@
-package pl.rzemla.bitbayalarm;
+package pl.rzemla.bitbayalarm.singletons;
 
 import android.content.Context;
 

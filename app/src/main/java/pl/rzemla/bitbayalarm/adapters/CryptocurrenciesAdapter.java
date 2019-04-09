@@ -67,7 +67,7 @@ public class CryptocurrenciesAdapter extends RecyclerView.Adapter<Cryptocurrenci
             }
         });
 
-        if(cryptocurrency.getName().equals(currentCryptocurrencyClicked)) {
+        if (cryptocurrency.getName().equals(currentCryptocurrencyClicked)) {
             holder.cryptocurrencyLayout.setBackgroundResource(cryptocurrency.getLayoutBackgroundRes());
             holder.cryptocurrencyNameTV.setText(cryptocurrenciesList.get(position).getName());
             holder.cryptocurrencyIV.setImageResource(cryptocurrenciesList.get(position).getImageSourceRes());
@@ -80,8 +80,6 @@ public class CryptocurrenciesAdapter extends RecyclerView.Adapter<Cryptocurrenci
             double dpToPx = mContext.getResources().getDisplayMetrics().density;
             holder.cryptocurrencyNameTV.setPadding(0, 0, 0, (int) (dpToPx * 6));
         }
-
-
 
 
     }

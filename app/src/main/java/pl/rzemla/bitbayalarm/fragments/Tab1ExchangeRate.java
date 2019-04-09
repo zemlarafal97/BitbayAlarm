@@ -17,11 +17,12 @@ import pl.rzemla.bitbayalarm.BitbayRequest;
 import pl.rzemla.bitbayalarm.Resources;
 import pl.rzemla.bitbayalarm.interfaces.AdapterClicker;
 import pl.rzemla.bitbayalarm.interfaces.ServerCallback;
-import pl.rzemla.bitbayalarm.VolleySingleton;
+import pl.rzemla.bitbayalarm.singletons.VolleySingleton;
 import pl.rzemla.bitbayalarm.adapters.CryptocurrenciesAdapter;
 
 
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.example.bitbayalarm.R;
 
 import pl.rzemla.bitbayalarm.other.Bitbay;
@@ -70,15 +71,15 @@ public class Tab1ExchangeRate extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_tab1, container, false);
 
+        currentCurrency = loadCurrencyPreference(getActivity());
+        currentCryptocurrency = loadCryptocurrencyPreference(getActivity());
+
         initializeViewElements(rootView);
         initializeCryptocurrenciesRecyclerView(rootView);
 
         mQueue = VolleySingleton.getInstance(getActivity()).getRequestQueue();
 
         setViewElementsClickListeners();
-
-        currentCurrency = loadCurrencyPreference(getActivity());
-        currentCryptocurrency = loadCryptocurrencyPreference(getActivity());
 
         switch (currentCurrency) {
             case "PLN":
@@ -119,6 +120,7 @@ public class Tab1ExchangeRate extends Fragment {
         usdTV = rootView.findViewById(R.id.usdTextView);
         eurTV = rootView.findViewById(R.id.eurTextView);
         btc2TV = rootView.findViewById(R.id.btc2TextView);
+
     }
 
     private void initializeCryptocurrenciesRecyclerView(View rootView) {

@@ -3,12 +3,16 @@ package pl.rzemla.bitbayalarm.other;
 public class Song {
     private String songPath;
     private String songTitle;
-    boolean vibration;
+    private boolean vibration;
 
     public Song(String songPath, String songTitle, boolean vibration) {
         this.songPath = songPath;
         this.songTitle = songTitle;
         this.vibration = vibration;
+    }
+
+    public Song() {
+        boolean vibration = false;
     }
 
     public String getSongPath() {

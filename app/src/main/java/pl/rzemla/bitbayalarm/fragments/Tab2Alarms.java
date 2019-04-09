@@ -1,58 +1,88 @@
 package pl.rzemla.bitbayalarm.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.bitbayalarm.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import pl.rzemla.bitbayalarm.activities.AlarmSettingsActivity;
 import pl.rzemla.bitbayalarm.adapters.AlarmsAdapter;
-import pl.rzemla.bitbayalarm.enums.AlarmMode;
+import pl.rzemla.bitbayalarm.enums.AlarmSettingsMode;
 import pl.rzemla.bitbayalarm.other.Alarm;
+import pl.rzemla.bitbayalarm.singletons.AlarmsSingleton;
 
 
 public class Tab2Alarms extends Fragment {
 
-    private RecyclerView recyclerView;
     private AlarmsAdapter alarmsAdapter;
-    private LinearLayoutManager layoutManager;
-    private List<Alarm> alarmList;
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_tab2, container, false);
 
-        alarmList = new ArrayList<>();
-        alarmList.add(new Alarm("PLN","BTC",false,0,null, AlarmMode.FALL_BELOW));
-        alarmList.add(new Alarm("PLN","BTC",false,0,null, AlarmMode.FALL_BELOW));
-        alarmList.add(new Alarm("PLN","BTC",false,0,null, AlarmMode.FALL_BELOW));
-        alarmList.add(new Alarm("PLN","BTC",false,0,null, AlarmMode.FALL_BELOW));
+        FloatingActionButton floatingActionButton = rootView.findViewById(R.id.add_floating_button);
+
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Floating button clicked!", Toast.LENGTH_SHORT).show();
+
+                Intent settingsIntent = new Intent(getActivity(), AlarmSettingsActivity.class);
+                settingsIntent.putExtra("alarmSettingsMode", AlarmSettingsMode.ADD_MODE);
+
+                startActivity(settingsIntent);
+
+
+            }
+        });
+
 
         initializeRecyclerView(rootView);
 
         return rootView;
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        alarmsAdapter.notifyDataSetChanged();
+    }
 
     private void initializeRecyclerView(View view) {
-        recyclerView = view.findViewById(R.id.alarms_recycler_view);
-        alarmsAdapter = new AlarmsAdapter(getActivity(),alarmList);
-        layoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView recyclerView = view.findViewById(R.id.alarms_recycler_view);
+
+        List<Alarm> alarmList = AlarmsSingleton.getInstance(getActivity()).getAlarmsList();
+
+        alarmsAdapter = new AlarmsAdapter(getActivity(), alarmList);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(alarmsAdapter);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
 
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        AlarmsSingleton.getInstance(getActivity()).saveAlarmsToSharedPrefs(getActivity());
+    }
 }
 

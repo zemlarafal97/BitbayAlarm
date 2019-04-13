@@ -14,7 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import pl.rzemla.bitbayalarm.BitbayRequest;
-import pl.rzemla.bitbayalarm.Resources;
+import pl.rzemla.bitbayalarm.R;
+import pl.rzemla.bitbayalarm.other.Resources;
 import pl.rzemla.bitbayalarm.interfaces.AdapterClicker;
 import pl.rzemla.bitbayalarm.interfaces.ServerCallback;
 import pl.rzemla.bitbayalarm.singletons.VolleySingleton;
@@ -22,8 +23,7 @@ import pl.rzemla.bitbayalarm.adapters.CryptocurrenciesAdapter;
 
 
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-import com.example.bitbayalarm.R;
+
 
 import pl.rzemla.bitbayalarm.other.Bitbay;
 import pl.rzemla.bitbayalarm.other.Cryptocurrency;

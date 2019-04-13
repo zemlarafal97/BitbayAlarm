@@ -42,21 +42,20 @@ public class Bitbay {
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("LAST: ");
-        stringBuilder.append(this.last);
-        stringBuilder.append("\n");
-        stringBuilder.append("MAX24H: ");
-        stringBuilder.append(this.max24h);
-        stringBuilder.append("\n");
-        stringBuilder.append("MIN24H: ");
-        stringBuilder.append(this.min24h);
-        stringBuilder.append("\n");
-        stringBuilder.append("VOLUME: ");
-        stringBuilder.append(this.volume);
-        stringBuilder.append("\n");
 
 
-        return stringBuilder.toString();
+        String result = "LAST: " +
+                this.last +
+                "\n" +
+                "MAX24H: " +
+                this.max24h +
+                "\n" +
+                "MIN24H: " +
+                this.min24h +
+                "\n" +
+                "VOLUME: " +
+                this.volume +
+                "\n";
+        return result;
     }
 }

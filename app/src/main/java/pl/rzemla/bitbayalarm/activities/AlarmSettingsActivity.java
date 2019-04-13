@@ -1,9 +1,14 @@
 package pl.rzemla.bitbayalarm.activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -18,9 +23,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bitbayalarm.R;
 
-import pl.rzemla.bitbayalarm.Resources;
+import pl.rzemla.bitbayalarm.R;
+import pl.rzemla.bitbayalarm.other.FileMetaData;
+import pl.rzemla.bitbayalarm.other.Resources;
 import pl.rzemla.bitbayalarm.enums.AlarmMode;
 import pl.rzemla.bitbayalarm.enums.AlarmSettingsMode;
 import pl.rzemla.bitbayalarm.other.Alarm;
@@ -45,7 +51,15 @@ public class AlarmSettingsActivity extends AppCompatActivity {
     private TextView alarmSoundTitleTV;
 
     private AlarmSettingsMode alarmSettingsMode;
+
+    private ArrayAdapter<String> currencyAdapter;
+    private ArrayAdapter<String> cryptocurrencyAdapter;
+    private ArrayAdapter<String> alarmTypeAdapter;
+
+    private Alarm alarm;
     private Song song;
+
+    private int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 99;
 
 
     @Override
@@ -53,22 +67,26 @@ public class AlarmSettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_settings);
 
+        alarmSettingsMode = (AlarmSettingsMode) getIntent().getSerializableExtra("alarmSettingsMode");
+        alarm = (Alarm) getIntent().getSerializableExtra("alarm");
+
         initializeViewElements();
         setOnClickListeners();
+        setViewElementsValues();
 
-        Toolbar toolbar = findViewById(R.id.alarm_settings_activity_toolbar);
-        setSupportActionBar(toolbar);
+        if(alarmSettingsMode == AlarmSettingsMode.ADD_MODE) {
+            song = new Song();
+        } else {
+            song = alarm.getSong();
+        }
 
-        toolbar.setTitle("AAAAAAAAAAAAAAAAAAa");
-
-
-        alarmSettingsMode = (AlarmSettingsMode) getIntent().getSerializableExtra("alarmSettingsMode");
-
-        setToolbarTitle(toolbar);
-        song = new Song();
 
         Log.d("Alarm mode", String.valueOf(alarmSettingsMode));
 
+    }
+
+    private boolean isAlarmSettingsInEditMode(AlarmSettingsMode alarmSettingsMode) {
+        return alarmSettingsMode == AlarmSettingsMode.EDIT_MODE;
     }
 
     private void setToolbarTitle(Toolbar toolbar) {
@@ -81,6 +99,10 @@ public class AlarmSettingsActivity extends AppCompatActivity {
 
     private void initializeViewElements() {
 
+        Toolbar toolbar = findViewById(R.id.alarm_settings_activity_toolbar);
+        setSupportActionBar(toolbar);
+        setToolbarTitle(toolbar);
+
         limitValueET = findViewById(R.id.limitValueET);
         refreshFrequencyET = findViewById(R.id.refreshFrequencyValueET);
         saveAndExitBtt = findViewById(R.id.saveAndExitBtt);
@@ -92,15 +114,60 @@ public class AlarmSettingsActivity extends AppCompatActivity {
         vibrationCheckBox = findViewById(R.id.vibrationCheckBox);
         alarmSoundTitleTV = findViewById(R.id.alarmSoundValueTV);
 
-        ArrayAdapter<String> currencyAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, Resources.getCurrencies());
+        currencyAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, Resources.getCurrencies());
         currencySpinner.setAdapter(currencyAdapter);
 
-        ArrayAdapter<String> cryptocurrencyAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, Resources.getCryptocurrencies());
+        cryptocurrencyAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, Resources.getCryptocurrencies());
         cryptocurrencySpinner.setAdapter(cryptocurrencyAdapter);
 
         String[] alarmTypes = {getResources().getString(R.string.will_rise_above), getResources().getString(R.string.will_fall_below), getResources().getString(R.string.track_exchange)};
-        ArrayAdapter<String> alarmTypeAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, alarmTypes);
+        alarmTypeAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, alarmTypes);
         alarmTypeSpinner.setAdapter(alarmTypeAdapter);
+
+
+
+    }
+
+    private void setViewElementsValues() {
+
+        if(isAlarmSettingsInEditMode(alarmSettingsMode)) {
+
+            System.out.println(alarm.toString());
+
+            switch(alarm.getAlarmMode()) {
+                case RISE_ABOVE:
+                    alarmTypeSpinner.setSelection(alarmTypeAdapter.getPosition(getResources().getString(R.string.will_rise_above)));
+                    break;
+                case FALL_BELOW:
+                    alarmTypeSpinner.setSelection(alarmTypeAdapter.getPosition(getResources().getString(R.string.will_fall_below)));
+                    break;
+                case TRACK_RATE:
+                    alarmTypeSpinner.setSelection(alarmTypeAdapter.getPosition(getResources().getString(R.string.track_exchange)));
+                    break;
+            }
+
+
+            if(alarm.isAdditionalTracking()) {
+                trackCheckBox.setChecked(true);
+            } else {
+                trackCheckBox.setChecked(false);
+            }
+
+            if(alarm.getSong().isVibration()) {
+                vibrationCheckBox.setChecked(true);
+            } else {
+                vibrationCheckBox.setChecked(false);
+            }
+            cryptocurrencySpinner.setSelection(cryptocurrencyAdapter.getPosition(alarm.getCryptoCurrency()));
+            currencySpinner.setSelection(currencyAdapter.getPosition(alarm.getCurrency()));
+            limitValueET.setText(String.valueOf(alarm.getValue()));
+            refreshFrequencyET.setText(String.valueOf(Alarm.getRefreshTime()));
+            alarmSoundTitleTV.setText(alarm.getSong().getSongTitle());
+        } else {
+            refreshFrequencyET.setText(String.valueOf(Alarm.getRefreshTime()));
+
+        }
+
     }
 
     private boolean isAdditionalTracking() {
@@ -129,7 +196,10 @@ public class AlarmSettingsActivity extends AppCompatActivity {
                     String currency = currencySpinner.getSelectedItem().toString();
                     String cryptoCurrency = cryptocurrencySpinner.getSelectedItem().toString();
                     double value = Double.parseDouble(limitValueET.getText().toString());
-                    Alarm alarm = new Alarm(currency, cryptoCurrency, false, value, song, getAlarmMode(), isAdditionalTracking());
+                    int refreshTime = Integer.parseInt(refreshFrequencyET.getText().toString());
+                    song.setVibration(hasVibrationBeenSet());
+
+                    Alarm alarm = new Alarm(currency, cryptoCurrency, false, value, song, getAlarmMode(), refreshTime, isAdditionalTracking());
 
                     if (alarmSettingsMode == AlarmSettingsMode.ADD_MODE) {
                         AlarmsSingleton.getInstance(AlarmSettingsActivity.this).getAlarmsList().add(alarm);
@@ -140,7 +210,7 @@ public class AlarmSettingsActivity extends AppCompatActivity {
 
                     finish();
                 } else {
-                    Toast.makeText(AlarmSettingsActivity.this,getResources().getText(R.string.Correct_input),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AlarmSettingsActivity.this, getResources().getText(R.string.Correct_input), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -175,6 +245,10 @@ public class AlarmSettingsActivity extends AppCompatActivity {
 
     }
 
+    private boolean hasVibrationBeenSet() {
+        return vibrationCheckBox.isChecked();
+    }
+
     private AlarmMode getAlarmMode() {
 
         if (alarmTypeSpinner.getSelectedItem().toString().equals(getResources().getString(R.string.will_rise_above))) {
@@ -187,14 +261,50 @@ public class AlarmSettingsActivity extends AppCompatActivity {
 
     }
 
+    private boolean canReadExternalStorage() {
+        int permissionCheck = ContextCompat.checkSelfPermission(AlarmSettingsActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+
+        return permissionCheck == PackageManager.PERMISSION_GRANTED;
+    }
+
     private void selectAlarmSong() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, 10);
+
+        if(canReadExternalStorage()) {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, 1);
+        } else {
+            ActivityCompat.requestPermissions(AlarmSettingsActivity.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+        }
+
+
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        if(requestCode != RESULT_CANCELED) {
+            try {
+
+                Uri uri = intent.getData();
+                String title = FileMetaData.getFileMetaData(AlarmSettingsActivity.this, uri).getDisplayName();
+
+                if (uri.toString().contains("content://media")) {
+                    song.setSongTitle(title);
+                    song.setSongUri(uri.toString());
+                } else {
+                    Toast.makeText(AlarmSettingsActivity.this, R.string.use_different_app_to_play_song, Toast.LENGTH_SHORT).show();
+                    song.setSongTitle("default");
+                    song.setSongUri("");
+                }
+
+                alarmSoundTitleTV.setText(title);
+            } catch(NullPointerException e) {
+                e.printStackTrace();
+            }
+
+        }
+
 
 
     }

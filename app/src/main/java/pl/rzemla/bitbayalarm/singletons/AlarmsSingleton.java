@@ -38,7 +38,6 @@ public class AlarmsSingleton {
 
         for (Alarm a : list) {
             //Save alarms to shared prefs
-
             Gson gson = new Gson();
             String json = gson.toJson(a);
             prefsEditor.putString("alarm" + position, json);
@@ -49,27 +48,35 @@ public class AlarmsSingleton {
 
     }
 
+    public boolean isAnyAlarmRunning() {
+        for (Alarm a : list) {
+            if (a.isRunning()) return true;
+        }
+
+        return false;
+    }
+
     public static AlarmsSingleton getInstance(Context mContext) {
 
         if (mInstance == null) {
             mInstance = new AlarmsSingleton();
-
-            SharedPreferences appSharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext.getApplicationContext());
-            int listSize = appSharedPrefs.getInt("AlarmListSize", 0);
-
-            Gson gson = new Gson();
-
-            for (int i = 0; i < listSize; i++) {
-                String json = appSharedPrefs.getString("alarm" + i, "");
-                Alarm a = gson.fromJson(json, Alarm.class);
-                list.add(a);
-            }
-
-            //Fill with alarms from Shared Prefs
-
-
+            loadAlarmsFromSharedPrefs(mContext);
         }
+
         return mInstance;
+    }
+
+    private static void loadAlarmsFromSharedPrefs(Context mContext) {
+        SharedPreferences appSharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext.getApplicationContext());
+        int listSize = appSharedPrefs.getInt("AlarmListSize", 0);
+
+        Gson gson = new Gson();
+
+        for (int i = 0; i < listSize; i++) {
+            String json = appSharedPrefs.getString("alarm" + i, "");
+            Alarm a = gson.fromJson(json, Alarm.class);
+            list.add(a);
+        }
     }
 
     public List<Alarm> getAlarmsList() {

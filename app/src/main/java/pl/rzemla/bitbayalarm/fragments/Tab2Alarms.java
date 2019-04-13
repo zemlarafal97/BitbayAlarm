@@ -10,12 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.example.bitbayalarm.R;
 
 import java.util.List;
 
+import pl.rzemla.bitbayalarm.R;
 import pl.rzemla.bitbayalarm.activities.AlarmSettingsActivity;
 import pl.rzemla.bitbayalarm.adapters.AlarmsAdapter;
 import pl.rzemla.bitbayalarm.enums.AlarmSettingsMode;
@@ -32,20 +31,15 @@ public class Tab2Alarms extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_tab2, container, false);
 
-        FloatingActionButton floatingActionButton = rootView.findViewById(R.id.add_floating_button);
 
+        FloatingActionButton floatingActionButton = rootView.findViewById(R.id.add_floating_button);
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Floating button clicked!", Toast.LENGTH_SHORT).show();
-
                 Intent settingsIntent = new Intent(getActivity(), AlarmSettingsActivity.class);
                 settingsIntent.putExtra("alarmSettingsMode", AlarmSettingsMode.ADD_MODE);
-
                 startActivity(settingsIntent);
-
-
             }
         });
 

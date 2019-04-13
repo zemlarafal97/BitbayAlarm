@@ -1,9 +1,10 @@
 package pl.rzemla.bitbayalarm.adapters;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
@@ -14,15 +15,17 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.example.bitbayalarm.R;
+import android.widget.Toast;
 
 import java.util.List;
 
+import pl.rzemla.bitbayalarm.R;
 import pl.rzemla.bitbayalarm.activities.AlarmSettingsActivity;
 import pl.rzemla.bitbayalarm.enums.AlarmMode;
 import pl.rzemla.bitbayalarm.enums.AlarmSettingsMode;
 import pl.rzemla.bitbayalarm.other.Alarm;
+import pl.rzemla.bitbayalarm.services.AlarmTrackingService;
+import pl.rzemla.bitbayalarm.singletons.AlarmsSingleton;
 
 public class AlarmsAdapter extends RecyclerView.Adapter<AlarmsAdapter.MyViewHolder> {
     private Context mContext;
@@ -66,13 +69,15 @@ public class AlarmsAdapter extends RecyclerView.Adapter<AlarmsAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull final AlarmsAdapter.MyViewHolder holder, final int position) {
 
-        setHolderAlarmCard(holder,holder.getAdapterPosition());
+        setHolderAlarmCard(holder, holder.getAdapterPosition());
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("Alarm clicked", "Yes!");
                 Intent settingsIntent = new Intent(mContext, AlarmSettingsActivity.class);
+                settingsIntent.putExtra("alarm", alarmList.get(position));
                 settingsIntent.putExtra("position",position);
                 settingsIntent.putExtra("alarmSettingsMode", AlarmSettingsMode.EDIT_MODE);
                 mContext.startActivity(settingsIntent);
@@ -82,19 +87,48 @@ public class AlarmsAdapter extends RecyclerView.Adapter<AlarmsAdapter.MyViewHold
         holder.deleteAlarmBtt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alarmList.remove(holder.getAdapterPosition());
-                notifyDataSetChanged();
+
+                if(canDeleteAlarm(alarmList.get(position))) {
+                    alarmList.remove(holder.getAdapterPosition());
+                    notifyDataSetChanged();
+                }else {
+                    Toast.makeText(mContext,R.string.Turn_off_the_alarm_to_delete,Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
+
+
 
 
         holder.alarmSwitch.setOnCheckedChangeListener(new SwitchCompat.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d("OnCheckecChanged", "Yes");
+
+                alarmList.get(holder.getAdapterPosition()).setRunning(isChecked);
+
+                final Intent serviceIntent = new Intent(mContext, AlarmTrackingService.class);
+
+                if (AlarmsSingleton.getInstance(mContext).isAnyAlarmRunning()) {
+                    mContext.startService(serviceIntent);
+
+                } else {
+
+                    PendingIntent pendingIntent = PendingIntent.getService(mContext,0,serviceIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+                    AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+                    alarmManager.cancel(pendingIntent);
+
+                    mContext.stopService(serviceIntent);
+                    Log.d("Service stop", "true");
+                }
             }
         });
 
+    }
+
+    private boolean canDeleteAlarm(Alarm a) {
+        if(a.isRunning()) return false;
+        return true;
     }
 
     private void setHolderAlarmCard(AlarmsAdapter.MyViewHolder holder, int position) {
@@ -117,6 +151,12 @@ public class AlarmsAdapter extends RecyclerView.Adapter<AlarmsAdapter.MyViewHold
             holder.alarmTypeValueTV.setText(mContext.getString(R.string.will_rise_above));
         } else if (alarm.getAlarmMode() == AlarmMode.TRACK_RATE) {
             holder.alarmTypeValueTV.setText(mContext.getString(R.string.track_exchange));
+        }
+
+        if (alarm.isRunning()) {
+            holder.alarmSwitch.setChecked(true);
+        } else {
+            holder.alarmSwitch.setChecked(false);
         }
     }
 

@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.bitbayalarm.R;
+import pl.rzemla.bitbayalarm.R;
 import pl.rzemla.bitbayalarm.fragments.Tab1ExchangeRate;
 import pl.rzemla.bitbayalarm.fragments.Tab2Alarms;
 import pl.rzemla.bitbayalarm.fragments.Tab3ProfitCalculator;

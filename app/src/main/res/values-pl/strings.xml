@@ -61,7 +61,7 @@
     <string name="Exchange_rate_title">Kurs</string>
     <string name="has_fallen_below">spadł poniżej</string>
     <string name="has_risen_above">wzrósł powyżej</string>
-    <string name="will_rise_above">wzrośnie powyżej:</string>
+    <string name="will_rise_above">wzrośnie powyżej</string>
     <string name="will_fall_below">spadnie poniżej</string>
 
     <string name="Correct_input">Popraw dane wejściowe!</string>
@@ -69,7 +69,7 @@
     <string name="Will_rise_above">Gdy wzrośnie powyżej</string>
     <string name="Will_fall_below">Gdy spadnie poniżej</string>
     <string name="Track_exchange_rate">Śledź kurs waluty</string>
-    <string name="track_exchange">Śledź kurs</string>
+    <string name="track_exchange">śledź kurs</string>
 
     <string name="Saved_succesfully">Zapisano pomyślnie!</string>
     <string name="Set_read_external_storage_permission">Przyznaj uprawnienia odczytu z pamięci!</string>

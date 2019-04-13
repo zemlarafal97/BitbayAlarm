@@ -10,8 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.bitbayalarm.R;
-
+import pl.rzemla.bitbayalarm.R;
 import pl.rzemla.bitbayalarm.interfaces.AdapterClicker;
 import pl.rzemla.bitbayalarm.other.Cryptocurrency;
 

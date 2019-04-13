@@ -1,10 +1,10 @@
-package pl.rzemla.bitbayalarm;
+package pl.rzemla.bitbayalarm.other;
 
 public class Resources {
 
     private final static String[] currencies = {"PLN", "USD", "EUR", "BTC"};
     private final static String[] cryptocurrencies = {"BTC", "BCC", "BTG", "LTC", "ETH", "LSK", "DASH", "GAME", "XIN", "XRP", "KZC", "XMR", "ZEC", "GNT", "FTO", "OMG", "PAY", "REP", "ZRX", "BAT", "NEU", "TRX"};
-
+    private final static Integer[] intervals = {1, 2, 3, 4, 5, 10, 15, 20, 30, 60};
 
     public static String[] getCryptocurrencies() {
         return cryptocurrencies;
@@ -12,6 +12,10 @@ public class Resources {
 
     public static String[] getCurrencies() {
         return currencies;
+    }
+
+    public static Integer[] getIntervals() {
+        return intervals;
     }
 
     public static String getCurrencySymbol(String currency) {
@@ -29,6 +33,7 @@ public class Resources {
                 return "unknown";
         }
     }
+
 
 
 }

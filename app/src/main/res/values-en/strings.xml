@@ -51,7 +51,7 @@
     <string name="No_lose_exchange_rate">Lossless exchange rate</string>
     <string name="You_will_receive">You will receive</string>
     <string name="default_BTC_exchange_rate">BTC:</string>
-    <string name="track_exchange">Track exchange rate</string>
+    <string name="track_exchange">track exchange</string>
     <string name="Will_fall_below">Will fall below</string>
     <string name="Will_rise_above">Will rise above</string>
     <string name="has_fallen_below">has fallen below</string>

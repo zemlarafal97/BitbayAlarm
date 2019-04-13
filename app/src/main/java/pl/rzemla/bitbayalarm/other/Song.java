@@ -1,26 +1,25 @@
 package pl.rzemla.bitbayalarm.other;
 
-public class Song {
-    private String songPath;
+import android.net.Uri;
+
+import java.io.Serializable;
+
+public class Song implements Serializable {
+    private String songUri;
     private String songTitle;
     private boolean vibration;
 
-    public Song(String songPath, String songTitle, boolean vibration) {
-        this.songPath = songPath;
+
+    public Song(String songUri, String songTitle, boolean vibration) {
+        this.songUri = songUri;
         this.songTitle = songTitle;
         this.vibration = vibration;
     }
 
     public Song() {
-        boolean vibration = false;
-    }
-
-    public String getSongPath() {
-        return songPath;
-    }
-
-    public void setSongPath(String songPath) {
-        this.songPath = songPath;
+        songUri = null;
+        songTitle = "default";
+        vibration = false;
     }
 
     public String getSongTitle() {
@@ -37,5 +36,20 @@ public class Song {
 
     public void setVibration(boolean vibration) {
         this.vibration = vibration;
+    }
+
+    public String getSongUri() {
+        return songUri;
+    }
+
+    public void setSongUri(String songUri) {
+        this.songUri = songUri;
+    }
+
+    @Override
+    public String toString() {
+        return "URI: " + songUri + "\n" +
+                        "TITLE: " + songTitle + "\n"+
+                        "VIBRATION: " + vibration;
     }
 }

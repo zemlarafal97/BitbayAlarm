@@ -13,8 +13,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bitbayalarm.R;
-import pl.rzemla.bitbayalarm.Resources;
+import pl.rzemla.bitbayalarm.R;
+import pl.rzemla.bitbayalarm.other.Resources;
 import pl.rzemla.bitbayalarm.other.Calculator;
 
 import java.text.DecimalFormat;

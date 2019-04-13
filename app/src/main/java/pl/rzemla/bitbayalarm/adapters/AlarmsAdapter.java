@@ -75,12 +75,17 @@ public class AlarmsAdapter extends RecyclerView.Adapter<AlarmsAdapter.MyViewHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Alarm clicked", "Yes!");
-                Intent settingsIntent = new Intent(mContext, AlarmSettingsActivity.class);
-                settingsIntent.putExtra("alarm", alarmList.get(position));
-                settingsIntent.putExtra("position",position);
-                settingsIntent.putExtra("alarmSettingsMode", AlarmSettingsMode.EDIT_MODE);
-                mContext.startActivity(settingsIntent);
+                if(alarmList.get(position).isRunning()) {
+                    Toast.makeText(mContext,mContext.getResources().getString(R.string.Turn_off_the_alarm_to_edit),Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.d("Alarm clicked", "Yes!");
+                    Intent settingsIntent = new Intent(mContext, AlarmSettingsActivity.class);
+                    settingsIntent.putExtra("alarm", alarmList.get(position));
+                    settingsIntent.putExtra("position",position);
+                    settingsIntent.putExtra("alarmSettingsMode", AlarmSettingsMode.EDIT_MODE);
+                    mContext.startActivity(settingsIntent);
+                }
+
             }
         });
 
@@ -119,7 +124,7 @@ public class AlarmsAdapter extends RecyclerView.Adapter<AlarmsAdapter.MyViewHold
                     alarmManager.cancel(pendingIntent);
 
                     mContext.stopService(serviceIntent);
-                    Log.d("Service stop", "true");
+                    Log.d("Service stop", "AlarmTrackingService");
                 }
             }
         });

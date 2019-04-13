@@ -16,6 +16,38 @@ import pl.rzemla.bitbayalarm.other.Bitbay;
 
 public class BitbayRequest {
 
+    public static void makeBitbayTickerRequest(RequestQueue requestQueue, String url, final ServerCallback callback) {
+
+
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Bitbay bitbay = new Bitbay();
+                try {
+                    bitbay.setLast(response.getDouble("last"));
+                    bitbay.setMin24h(response.getDouble("min"));
+                    bitbay.setMax24h(response.getDouble("max"));
+                    bitbay.setVolume(response.getDouble("volume"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                callback.onSuccess(bitbay);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        requestQueue.add(jsonObjectRequest);
+
+    }
 
     public static void makeBitbayTickerRequest(RequestQueue requestQueue, String cryptocurrencyCode, String currencyCode, final ServerCallback callback) {
 
@@ -101,6 +133,7 @@ public class BitbayRequest {
 
     public static String getTickerUrl(String cryptocurrency, String currency) {
         return "https://bitbay.net/API/Public/" + cryptocurrency + currency + "/ticker.json";
+
     }
 
 }

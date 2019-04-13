@@ -26,6 +26,7 @@ import java.util.Locale;
 import pl.rzemla.bitbayalarm.BitbayRequest;
 import pl.rzemla.bitbayalarm.R;
 import pl.rzemla.bitbayalarm.activities.AlarmActivity;
+import pl.rzemla.bitbayalarm.activities.AlarmSettingsActivity;
 import pl.rzemla.bitbayalarm.activities.MainActivity;
 import pl.rzemla.bitbayalarm.enums.AlarmMode;
 import pl.rzemla.bitbayalarm.interfaces.ServerCallback;
@@ -39,6 +40,7 @@ public class AlarmTrackingService extends Service {
     private List<Alarm> alarmList;
     private RequestQueue mRequestQueue;
     private int identifier;
+    private int refreshFrequency;
 
     private final int PENDING_INTENT_REQUEST_CODE = 10001;
 
@@ -62,6 +64,8 @@ public class AlarmTrackingService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("OnStartCommand", "AlarmTrackingService");
 
+        refreshFrequency = AlarmSettingsActivity.loadRefreshFreqPreference(this);
+
         showAlarmForegroundNotification();
         setAlarmPendingIntent();
         makeQueries();
@@ -77,9 +81,9 @@ public class AlarmTrackingService extends Service {
         alarmManager.cancel(pendingIntent);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 30 * 1000, pendingIntent);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + refreshFrequency * 1000, pendingIntent);
         } else {
-            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 30 * 1000, pendingIntent);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + refreshFrequency * 1000, pendingIntent);
         }
     }
 
@@ -115,7 +119,7 @@ public class AlarmTrackingService extends Service {
                     @Override
                     public void onSuccess(Bitbay bitbay) {
 
-                        if(a.isAdditionalTracking()) {
+                        if(a.isAdditionalTracking() || a.getAlarmMode()==AlarmMode.TRACK_RATE) {
                             sendNotification(identifier++,a.getCurrency(),a.getCryptoCurrency(),bitbay.getLast());
                         }
 
@@ -139,6 +143,8 @@ public class AlarmTrackingService extends Service {
 
                             stopSelf();
                         }
+
+
                     }
                 });
             }

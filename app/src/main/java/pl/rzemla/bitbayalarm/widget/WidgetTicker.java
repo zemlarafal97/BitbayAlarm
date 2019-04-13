@@ -4,16 +4,21 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 import pl.rzemla.bitbayalarm.R;
 import pl.rzemla.bitbayalarm.activities.MainActivity;
-import pl.rzemla.bitbayalarm.other.Cryptocurrency;
+import pl.rzemla.bitbayalarm.other.Resources;
 import pl.rzemla.bitbayalarm.services.UpdateService;
 
 
@@ -24,13 +29,16 @@ public class WidgetTicker extends AppWidgetProvider {
                                        int appWidgetId) {
 
 
-        String crypto = WidgetTickerConfigureActivity.loadCryptocurrenctPreference(context, appWidgetId);
+        Log.d("UPDATE APP WIDGET","+++++++++++++++++++++++");
+
+        String cryptocurrency = WidgetTickerConfigureActivity.loadCryptocurrenctPreference(context, appWidgetId);
 
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_ticker);
         views.setTextViewText(R.id.widget_value_TV, " - ");
         views.setTextViewText(R.id.widget_date_value_TV, "-");
-        switch (crypto) {
+
+        switch (cryptocurrency) {
             case "BTC":
                 views.setInt(R.id.widget_icon_IV, "setImageResource", R.drawable.btc_icon_24dp);
                 views.setInt(R.id.widget_icon_IV, "setBackgroundResource", R.drawable.widget_btc_background);
@@ -130,10 +138,25 @@ public class WidgetTicker extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
+    public static void setWidgetValues(Context context, AppWidgetManager appWidgetManager, int appWidgetId, double value, String currency) {
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        String date = dateFormat.format(Calendar.getInstance().getTime());
+        DecimalFormat df = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.US));
+        df.setMaximumFractionDigits(10);
+
+        String currencySymbol = Resources.getCurrencySymbol(currency);
+
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_ticker);
+        views.setTextViewText(R.id.widget_value_TV, String.valueOf(df.format(value)) + currencySymbol);
+        views.setTextViewText(R.id.widget_date_value_TV, date);
+        appWidgetManager.updateAppWidget(appWidgetId,views);
+    }
 
     @Override
     public void onUpdate(final Context context, final AppWidgetManager appWidgetManager, final int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
+
+        Log.d("onUpdate","WidgetTicker");
 
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
@@ -144,43 +167,25 @@ public class WidgetTicker extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
-
         super.onDeleted(context, appWidgetIds);
     }
 
 
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        //  Toast.makeText(context, intent.getAction(), Toast.LENGTH_SHORT).show();
         Log.d("onReceive", "Received intent " + intent);
 
 
-        if (intent.getAction().equals("android.appwidget.action.APPWIDGET_ENABLED")) {
+        if(intent.getAction().equals("android.appwidget.action.APPWIDGET_DISABLED")) {
+            Log.d("onReceive","DISABLED");
 
-            ComponentName name = new ComponentName(context, WidgetTicker.class);
-            int[] IDs = AppWidgetManager.getInstance(context).getAppWidgetIds(name);
-            onUpdate(context, AppWidgetManager.getInstance(context), IDs);
-
-            Intent serviceIntent = new Intent(context, UpdateService.class);
-            PendingIntent pi = PendingIntent.getService(context, 0, serviceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            am.cancel(pi);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                am.setExact(AlarmManager.RTC, System.currentTimeMillis() + 10 * 1000, pi);
-            } else {
-                am.set(AlarmManager.RTC, System.currentTimeMillis() + 10 * 1000, pi);
-            }
-
-        }
-
-        if (intent.getAction().equals("android.appwidget.action.APPWIDGET_DISABLED")) {
-            Intent serviceIntent = new Intent(context, UpdateService.class);
-            PendingIntent pi = PendingIntent.getService(context, 0, serviceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            am.cancel(pi);
-
+            Intent serviceIntent = new Intent(context,UpdateService.class);
+            PendingIntent pendingIntent = PendingIntent.getService(context,0,serviceIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            alarmManager.cancel(pendingIntent);
             context.stopService(new Intent(context, UpdateService.class));
+
 
         }
 

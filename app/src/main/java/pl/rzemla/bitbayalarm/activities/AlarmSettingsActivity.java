@@ -1,7 +1,9 @@
 package pl.rzemla.bitbayalarm.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -61,6 +63,20 @@ public class AlarmSettingsActivity extends AppCompatActivity {
 
     private int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 99;
 
+    private static final String PREFS_NAME = "pl.rzemla.bitbayalarm.AlarmSettingsActivity";
+    private static final String PREF_REFRESH_FREQ = "refreshFrequency";
+
+
+    private void saveRefreshFreqPreference(Context context, int refreshFreq) {
+        SharedPreferences.Editor prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit();
+        prefs.putInt(PREF_REFRESH_FREQ, refreshFreq);
+        prefs.apply();
+    }
+
+    public static int loadRefreshFreqPreference(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        return prefs.getInt(PREF_REFRESH_FREQ, 30);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -161,10 +177,10 @@ public class AlarmSettingsActivity extends AppCompatActivity {
             cryptocurrencySpinner.setSelection(cryptocurrencyAdapter.getPosition(alarm.getCryptoCurrency()));
             currencySpinner.setSelection(currencyAdapter.getPosition(alarm.getCurrency()));
             limitValueET.setText(String.valueOf(alarm.getValue()));
-            refreshFrequencyET.setText(String.valueOf(Alarm.getRefreshTime()));
+            refreshFrequencyET.setText(String.valueOf(loadRefreshFreqPreference(AlarmSettingsActivity.this)));
             alarmSoundTitleTV.setText(alarm.getSong().getSongTitle());
         } else {
-            refreshFrequencyET.setText(String.valueOf(Alarm.getRefreshTime()));
+            refreshFrequencyET.setText(String.valueOf(loadRefreshFreqPreference(AlarmSettingsActivity.this)));
 
         }
 
@@ -183,7 +199,15 @@ public class AlarmSettingsActivity extends AppCompatActivity {
     }
 
     private boolean isInputCorrect() {
-        return !isRefreshRateEmpty() && !isLimitValueEmpty();
+
+
+        if(alarmTypeSpinner.getSelectedItem().toString().equals(getResources().getString(R.string.track_exchange)) && isRefreshFrequencyValid(Integer.valueOf(refreshFrequencyET.getText().toString()))) {
+            return true;
+        }
+
+        if(!isLimitValueEmpty()&& isRefreshFrequencyValid(Integer.valueOf(refreshFrequencyET.getText().toString()))) return true;
+
+        return false;
     }
 
     private void setOnClickListeners() {
@@ -193,20 +217,23 @@ public class AlarmSettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (isInputCorrect()) {
+
                     String currency = currencySpinner.getSelectedItem().toString();
                     String cryptoCurrency = cryptocurrencySpinner.getSelectedItem().toString();
                     double value = Double.parseDouble(limitValueET.getText().toString());
                     int refreshTime = Integer.parseInt(refreshFrequencyET.getText().toString());
                     song.setVibration(hasVibrationBeenSet());
 
-                    Alarm alarm = new Alarm(currency, cryptoCurrency, false, value, song, getAlarmMode(), refreshTime, isAdditionalTracking());
+                    Alarm alarm = new Alarm(currency, cryptoCurrency, false, value, song, getAlarmMode(), isAdditionalTracking());
 
                     if (alarmSettingsMode == AlarmSettingsMode.ADD_MODE) {
                         AlarmsSingleton.getInstance(AlarmSettingsActivity.this).getAlarmsList().add(alarm);
+
                     } else if (alarmSettingsMode == AlarmSettingsMode.EDIT_MODE) {
                         AlarmsSingleton.getInstance(AlarmSettingsActivity.this).getAlarmsList().set(getIntent().getIntExtra("position", -1), alarm);
 
                     }
+                    saveRefreshFreqPreference(AlarmSettingsActivity.this,refreshTime);
 
                     finish();
                 } else {
@@ -229,11 +256,18 @@ public class AlarmSettingsActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (alarmTypeSpinner.getSelectedItem().toString().equals(getResources().getString(R.string.will_rise_above))) {
                     trackCheckBox.setVisibility(View.VISIBLE);
+                    vibrationCheckBox.setVisibility(View.VISIBLE);
+                    limitValueET.setEnabled(true);
                 } else if (alarmTypeSpinner.getSelectedItem().toString().equals(getResources().getString(R.string.will_fall_below))) {
                     trackCheckBox.setVisibility(View.VISIBLE);
+                    vibrationCheckBox.setVisibility(View.VISIBLE);
+                    limitValueET.setEnabled(true);
                 } else {
                     trackCheckBox.setVisibility(View.GONE);
+                    vibrationCheckBox.setVisibility(View.GONE);
                     trackCheckBox.setChecked(false);
+                    limitValueET.setText("0.0");
+                    limitValueET.setEnabled(false);
                 }
             }
 
@@ -243,6 +277,12 @@ public class AlarmSettingsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+
+
+    private boolean isRefreshFrequencyValid(int refreshFrequency) {
+        return (30 <= refreshFrequency && refreshFrequency <= 3600);
     }
 
     private boolean hasVibrationBeenSet() {

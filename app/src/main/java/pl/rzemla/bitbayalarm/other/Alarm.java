@@ -11,20 +11,18 @@ public class Alarm implements Serializable{
     private double value;
     private Song song;
     private AlarmMode alarmMode;
-    private static int refreshTime = 60;
     private boolean additionalTracking = false;
 
-    public Alarm(String currency, String cryptoCurrency, boolean running, double value, Song song, AlarmMode alarmMode, int refreshTime) {
+    public Alarm(String currency, String cryptoCurrency, boolean running, double value, Song song, AlarmMode alarmMode) {
         this.currency = currency;
         this.cryptoCurrency = cryptoCurrency;
         this.running = running;
         this.value = value;
         this.song = song;
         this.alarmMode = alarmMode;
-        Alarm.refreshTime = refreshTime;
     }
 
-    public Alarm(String currency, String cryptoCurrency, boolean running, double value, Song song, AlarmMode alarmMode,int refreshTime, boolean additionalTracking) {
+    public Alarm(String currency, String cryptoCurrency, boolean running, double value, Song song, AlarmMode alarmMode, boolean additionalTracking) {
         this.currency = currency;
         this.cryptoCurrency = cryptoCurrency;
         this.running = running;
@@ -32,7 +30,6 @@ public class Alarm implements Serializable{
         this.song = song;
         this.alarmMode = alarmMode;
         this.additionalTracking = additionalTracking;
-        Alarm.refreshTime = refreshTime;
     }
 
     public boolean isAdditionalTracking() {
@@ -43,13 +40,6 @@ public class Alarm implements Serializable{
         this.additionalTracking = additionalTracking;
     }
 
-    public static int getRefreshTime() {
-        return refreshTime;
-    }
-
-    public static void setRefreshTime(int refreshTime) {
-        Alarm.refreshTime = refreshTime;
-    }
 
     public String getCurrency() {
         return currency;
@@ -115,8 +105,7 @@ public class Alarm implements Serializable{
                 "Value: " + value + "\n" +
                 "Song: " + "---" + "\n" +
                 "AlarmMode: " + alarmMode + "\n" +
-                "AdditionalTracking: " + additionalTracking + "\n" +
-                "Refresh time: " + refreshTime + "\n";
+                "AdditionalTracking: " + additionalTracking + "\n";
 
         result += "\n";
         result += song.toString();

@@ -103,7 +103,6 @@ public class Alarm implements Serializable{
                 "CryptoCurrency: " + cryptoCurrency + "\n" +
                 "Running: " + running + "\n" +
                 "Value: " + value + "\n" +
-                "Song: " + "---" + "\n" +
                 "AlarmMode: " + alarmMode + "\n" +
                 "AdditionalTracking: " + additionalTracking + "\n";
 

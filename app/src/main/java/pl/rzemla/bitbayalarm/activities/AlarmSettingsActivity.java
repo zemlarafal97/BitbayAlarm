@@ -216,7 +216,7 @@ public class AlarmSettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (isInputCorrect()) {
+                if (isInputCorrect() && !cryptocurrencySpinner.getSelectedItem().toString().equals(currencySpinner.getSelectedItem().toString())) {
 
                     String currency = currencySpinner.getSelectedItem().toString();
                     String cryptoCurrency = cryptocurrencySpinner.getSelectedItem().toString();

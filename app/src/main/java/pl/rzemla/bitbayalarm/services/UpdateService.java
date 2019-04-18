@@ -47,10 +47,13 @@ public class UpdateService extends Service {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
 
+        int interval = WidgetTickerConfigureActivity.loadIntervalPref(UpdateService.this);
+        Log.d("Interval: ",String.valueOf(interval));
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 20 * 1000, pendingIntent);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + interval * 60 * 1000, pendingIntent);
         } else {
-            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 30 * 1000, pendingIntent);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + interval * 60 * 1000, pendingIntent);
         }
     }
 
@@ -81,7 +84,7 @@ public class UpdateService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        mRequestQueue = VolleySingleton.getInstance(this).getRequestQueue();
+        mRequestQueue = VolleySingleton.getInstance(this.getApplicationContext()).getRequestQueue();
     }
 
     @Override

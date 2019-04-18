@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -139,6 +140,7 @@ public class WidgetTicker extends AppWidgetProvider {
     }
 
     public static void setWidgetValues(Context context, AppWidgetManager appWidgetManager, int appWidgetId, double value, String currency) {
+        updateAppWidget(context,appWidgetManager,appWidgetId);
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         String date = dateFormat.format(Calendar.getInstance().getTime());
         DecimalFormat df = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.US));
@@ -176,6 +178,13 @@ public class WidgetTicker extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         Log.d("onReceive", "Received intent " + intent);
 
+        if(intent.getAction().equals("android.appwidget.action.APPWIDGET_ENABLED")) {
+            ComponentName name = new ComponentName(context, WidgetTicker.class);
+            int[] IDs = AppWidgetManager.getInstance(context).getAppWidgetIds(name);
+            onUpdate(context, AppWidgetManager.getInstance(context), IDs);
+
+            context.startService(new Intent(context,UpdateService.class));
+        }
 
         if(intent.getAction().equals("android.appwidget.action.APPWIDGET_DISABLED")) {
             Log.d("onReceive","DISABLED");
@@ -185,8 +194,6 @@ public class WidgetTicker extends AppWidgetProvider {
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             alarmManager.cancel(pendingIntent);
             context.stopService(new Intent(context, UpdateService.class));
-
-
         }
 
     }

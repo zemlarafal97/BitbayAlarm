@@ -193,12 +193,13 @@ public class WidgetTickerConfigureActivity extends Activity {
                     AlarmManager am = (AlarmManager) WidgetTickerConfigureActivity.this.getSystemService(Context.ALARM_SERVICE);
                     am.cancel(pi);
 
-                    //stopService(new Intent(WidgetTickerConfigureActivity.this, UpdateService.class));
+
+                    int interval = Integer.parseInt(intervalSpinner.getSelectedItem().toString());
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        am.setExact(AlarmManager.RTC, System.currentTimeMillis() + 20 * 1000, pi);
+                        am.setExact(AlarmManager.RTC, System.currentTimeMillis() + interval * 60 * 1000, pi);
                     } else {
-                        am.set(AlarmManager.RTC, System.currentTimeMillis() + 30 * 1000, pi);
+                        am.set(AlarmManager.RTC, System.currentTimeMillis() + interval * 60 * 1000, pi);
                     }
 
                     finish();

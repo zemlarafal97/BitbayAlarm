@@ -1,5 +1,6 @@
 package pl.rzemla.bitbayalarm.fragments;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import pl.rzemla.bitbayalarm.BitbayRequest;
 import pl.rzemla.bitbayalarm.R;
@@ -243,6 +245,14 @@ public class Tab1ExchangeRate extends Fragment {
 
                 }
             });
+        } else {
+            Toast.makeText(getActivity(),R.string.Cryptocurrency_must_be_different_than_currency,Toast.LENGTH_SHORT).show();
+            lastValueTV.setText("-");
+            maxValueTV.setText("-");
+            minValueTV.setText("-");
+            volumeValueTV.setText("-");
+            refreshTimeValueTV.setText("-");
+            exchangeDescrTV.setText("-");
         }
     }
 
@@ -258,7 +268,6 @@ public class Tab1ExchangeRate extends Fragment {
         unclickCurrenciesLayouts();
         double dpToPx = getActivity().getResources().getDisplayMetrics().density;
         view.setPadding(0, 0, 0, (int) (dpToPx * 18));
-        updateRatesViews();
     }
 
     private void saveCryptocurrencyPreference(Context context, String cryptocurrency) {

@@ -58,14 +58,12 @@
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.appwidget.action.APPWIDGET_DELETED" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="pl.rzemla.bitbayalarm.WIDGET_UPDATE" />
-            </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_ticker_info" />
         </receiver>
+
 
         <activity android:name="pl.rzemla.bitbayalarm.widget.WidgetTickerConfigureActivity">
             <intent-filter>

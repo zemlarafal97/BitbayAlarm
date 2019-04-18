@@ -36,6 +36,8 @@ import pl.rzemla.bitbayalarm.other.Resources;
 import pl.rzemla.bitbayalarm.singletons.AlarmsSingleton;
 import pl.rzemla.bitbayalarm.singletons.VolleySingleton;
 
+
+
 public class AlarmTrackingService extends Service {
     private List<Alarm> alarmList;
     private RequestQueue mRequestQueue;
@@ -52,10 +54,11 @@ public class AlarmTrackingService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
         Log.d("OnCreate", "AlarmTrackingService");
 
         alarmList = AlarmsSingleton.getInstance(this).getAlarmsList();
-        mRequestQueue = VolleySingleton.getInstance(this).getRequestQueue();
+        mRequestQueue = VolleySingleton.getInstance(this.getApplicationContext()).getRequestQueue();
 
 
     }
@@ -65,7 +68,6 @@ public class AlarmTrackingService extends Service {
         Log.d("OnStartCommand", "AlarmTrackingService");
 
         refreshFrequency = AlarmSettingsActivity.loadRefreshFreqPreference(this);
-
         showAlarmForegroundNotification();
         setAlarmPendingIntent();
         makeQueries();
@@ -105,13 +107,13 @@ public class AlarmTrackingService extends Service {
                         .setContentText(String.valueOf(last));
 
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
         mNotificationManager.notify(id,mBuilder.build());
     }
 
     private void makeQueries() {
 
         identifier = 0;
+
         for (final Alarm a : alarmList) {
 
             if (a.isRunning()) {

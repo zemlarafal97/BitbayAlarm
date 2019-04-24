@@ -128,6 +128,39 @@ public class WidgetTicker extends AppWidgetProvider {
                 views.setInt(R.id.widget_icon_IV, "setImageResource", R.drawable.trx_icon_24dp);
                 views.setInt(R.id.widget_icon_IV, "setBackgroundResource", R.drawable.widget_trx_background);
                 break;
+            case "EXY":
+                views.setInt(R.id.widget_icon_IV,"setImageResource",R.drawable.exy_icon_24dp);
+                views.setInt(R.id.widget_icon_IV,"setBackgroundResource",R.drawable.widget_exy_background);
+                break;
+            case "AMLT":
+                views.setInt(R.id.widget_icon_IV,"setImageResource",R.drawable.amlt_icon_24dp);
+                views.setInt(R.id.widget_icon_IV,"setBackgroundResource",R.drawable.widget_amlt_background);
+                break;
+            case "BOB":
+                views.setInt(R.id.widget_icon_IV,"setImageResource",R.drawable.bob_icon_24dp);
+                views.setInt(R.id.widget_icon_IV,"setBackgroundResource",R.drawable.widget_bob_background);
+                break;
+            case "LML":
+                views.setInt(R.id.widget_icon_IV,"setImageResource",R.drawable.lml_icon_24dp);
+                views.setInt(R.id.widget_icon_IV,"setBackgroundResource",R.drawable.widget_lml_background);
+                break;
+            case "BSV":
+                views.setInt(R.id.widget_icon_IV,"setImageResource",R.drawable.bsv_icon_24dp);
+                views.setInt(R.id.widget_icon_IV,"setBackgroundResource",R.drawable.widget_bsv_background);
+                break;
+            case "BCP":
+                views.setInt(R.id.widget_icon_IV,"setImageResource",R.drawable.bcp_icon_24dp);
+                views.setInt(R.id.widget_icon_IV,"setBackgroundResource",R.drawable.widget_bcp_background);
+                break;
+            case "XBX":
+                views.setInt(R.id.widget_icon_IV,"setImageResource",R.drawable.xbx_icon_24dp);
+                views.setInt(R.id.widget_icon_IV,"setBackgroundResource",R.drawable.widget_xbx_background);
+                break;
+            case "XLM":
+                views.setInt(R.id.widget_icon_IV,"setImageResource",R.drawable.xlm_icon_24dp);
+                views.setInt(R.id.widget_icon_IV,"setBackgroundResource",R.drawable.widget_xlm_background);
+                break;
+
         }
 
 

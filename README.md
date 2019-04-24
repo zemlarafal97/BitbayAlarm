@@ -1,10 +1,10 @@
 <h2>About application</h2>
-Bitbay Alarm is a cryptocurrency tracking application for Android phone users. It is directed to people who trade in Bitbay market. Application is also translated to polish language.
+Bitbay Alarm is a currency tracking application for Android phone users. It is directed to people who trade in Bitbay market. Application is also translated to polish language.
 
 <h2>Functionalities:</h2>
 <ul>
-  <li>current cryptocurrency prices</li>
-  <li>cryptocurrency alarms and prices tracking</li>
+  <li>current currency prices</li>
+  <li>currency alarms and prices tracking</li>
   <li>two calculators</li>
   <li>desktop widgets</li>
 </ul>

@@ -10,151 +10,16 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/my_recycler_view"
+            android:id="@+id/cryptocurrency_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-
-        <LinearLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/currency_recycler_view"
+            android:layout_marginTop="32dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:baselineAligned="false"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content" />
 
-
-            <LinearLayout
-                android:id="@+id/pln_layout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.0"
-                android:background="@drawable/shadow_pln"
-                android:orientation="vertical"
-                android:paddingLeft="24dp"
-                android:paddingTop="10dp"
-                android:paddingRight="24dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/PLN"
-                    android:src="@drawable/zl_icon_24dp" />
-
-                <TextView
-                    android:id="@+id/plnTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="2dp"
-                    android:fontFamily="sans-serif-condensed"
-                    android:paddingBottom="6dp"
-                    android:text="@string/PLN"
-                    android:textColor="@android:color/white"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/eur_layout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.0"
-                android:background="@drawable/shadow_eur"
-                android:orientation="vertical"
-                android:paddingLeft="24dp"
-                android:paddingTop="10dp"
-                android:paddingRight="24dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/EUR"
-                    android:src="@drawable/eur_icon_24dp" />
-
-                <TextView
-                    android:id="@+id/eurTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="2dp"
-                    android:fontFamily="sans-serif-condensed"
-                    android:paddingBottom="6dp"
-                    android:text="@string/EUR"
-                    android:textColor="@android:color/white"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/usd_layout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.0"
-                android:background="@drawable/shadow_usd"
-                android:orientation="vertical"
-                android:paddingLeft="24dp"
-                android:paddingTop="10dp"
-                android:paddingRight="24dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/USD"
-                    android:src="@drawable/dollar_icon_24dp" />
-
-                <TextView
-                    android:id="@+id/usdTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="2dp"
-                    android:fontFamily="sans-serif-condensed"
-                    android:paddingBottom="6dp"
-                    android:text="@string/USD"
-                    android:textColor="@android:color/white"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btc_layout2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.0"
-                android:background="@drawable/shadow_btc"
-                android:orientation="vertical"
-                android:paddingLeft="24dp"
-                android:paddingTop="10dp"
-                android:paddingRight="24dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/PLN"
-                    android:src="@drawable/btc_icon_24dp" />
-
-                <TextView
-                    android:id="@+id/btc2TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="2dp"
-                    android:fontFamily="sans-serif-condensed"
-                    android:paddingBottom="6dp"
-                    android:text="@string/BTC"
-                    android:textColor="@android:color/white"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-        </LinearLayout>
 
         <TextView
             android:id="@+id/exchangeDescrTV"
@@ -371,7 +236,6 @@
             android:layout_marginBottom="16dp"
             android:fontFamily="sans-serif-condensed"
             android:text="@string/Refresh" />
-
 
     </LinearLayout>
 </ScrollView>

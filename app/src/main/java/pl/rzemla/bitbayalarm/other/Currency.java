@@ -1,11 +1,12 @@
 package pl.rzemla.bitbayalarm.other;
 
-public class Cryptocurrency {
+public class Currency {
 
     private int layoutBackgroundRes;
     private int imageSourceRes;
     private String name;
-    public Cryptocurrency(int layoutBackgroundRes, int imageSourceRes, String name) {
+
+    public Currency(int layoutBackgroundRes, int imageSourceRes, String name) {
         this.layoutBackgroundRes = layoutBackgroundRes;
         this.imageSourceRes = imageSourceRes;
         this.name = name;

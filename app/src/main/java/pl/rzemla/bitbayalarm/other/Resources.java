@@ -2,8 +2,8 @@ package pl.rzemla.bitbayalarm.other;
 
 public class Resources {
 
-    private final static String[] currencies = {"PLN", "USD", "EUR", "BTC"};
-    private final static String[] cryptocurrencies = {"BTC", "BCC", "BTG", "LTC", "ETH", "LSK", "DASH", "GAME", "XIN", "XRP", "KZC", "XMR", "ZEC", "GNT", "FTO", "OMG", "PAY", "REP", "ZRX", "BAT", "NEU", "TRX"};
+    private final static String[] currencies = {"PLN", "USD", "EUR", "BTC","USDC"};
+    private final static String[] cryptocurrencies = {"BTC", "BCC", "BTG", "LTC", "ETH", "LSK", "DASH", "GAME", "XIN", "XRP", "KZC", "XMR", "ZEC", "GNT", "FTO", "OMG", "PAY", "REP", "ZRX", "BAT", "NEU", "TRX","EXY","AMLT","BOB","BSV","BCP","XBX","XLM"};
     private final static Integer[] intervals = {1, 2, 3, 4, 5, 10, 15, 20, 30, 60};
 
     public static String[] getCryptocurrencies() {
@@ -29,6 +29,8 @@ public class Resources {
                 return "€";
             case "BTC":
                 return "B";
+            case "USDC":
+                return "($)";
             default:
                 return "unknown";
         }

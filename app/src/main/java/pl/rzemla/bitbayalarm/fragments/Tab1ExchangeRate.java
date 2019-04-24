@@ -1,6 +1,5 @@
 package pl.rzemla.bitbayalarm.fragments;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,24 +10,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import pl.rzemla.bitbayalarm.BitbayRequest;
 import pl.rzemla.bitbayalarm.R;
+import pl.rzemla.bitbayalarm.other.Currency;
 import pl.rzemla.bitbayalarm.other.Resources;
 import pl.rzemla.bitbayalarm.interfaces.AdapterClicker;
 import pl.rzemla.bitbayalarm.interfaces.ServerCallback;
 import pl.rzemla.bitbayalarm.singletons.VolleySingleton;
-import pl.rzemla.bitbayalarm.adapters.CryptocurrenciesAdapter;
+import pl.rzemla.bitbayalarm.adapters.CurrenciesAdapter;
 
 
 import com.android.volley.RequestQueue;
 
 
 import pl.rzemla.bitbayalarm.other.Bitbay;
-import pl.rzemla.bitbayalarm.other.Cryptocurrency;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -48,15 +46,6 @@ public class Tab1ExchangeRate extends Fragment {
     private TextView minValueTV;
     private TextView refreshTimeValueTV;
     private TextView exchangeDescrTV;
-
-    private LinearLayout plnLayout;
-    private LinearLayout eurLayout;
-    private LinearLayout usdLayout;
-    private LinearLayout btc2Layout;
-    private TextView plnTV;
-    private TextView usdTV;
-    private TextView eurTV;
-    private TextView btc2TV;
 
     private String currentCryptocurrency = "BTC";
     private String currentCurrency = "PLN";
@@ -78,28 +67,11 @@ public class Tab1ExchangeRate extends Fragment {
 
         initializeViewElements(rootView);
         initializeCryptocurrenciesRecyclerView(rootView);
+        initializeCurrenciesRecyclerView(rootView);
 
         mQueue = VolleySingleton.getInstance(getActivity()).getRequestQueue();
 
         setViewElementsClickListeners();
-
-        switch (currentCurrency) {
-            case "PLN":
-                setCurrencyClicked(plnTV);
-                break;
-            case "USD":
-                setCurrencyClicked(usdTV);
-                break;
-            case "BTC":
-                setCurrencyClicked(btc2TV);
-                break;
-            case "EUR":
-                setCurrencyClicked(eurTV);
-                break;
-            default:
-                setCurrencyClicked(plnTV);
-        }
-
 
         updateRatesViews();
 
@@ -114,50 +86,76 @@ public class Tab1ExchangeRate extends Fragment {
         minValueTV = rootView.findViewById(R.id.minValueTV);
         refreshTimeValueTV = rootView.findViewById(R.id.refreshTimeValueTV);
         exchangeDescrTV = rootView.findViewById(R.id.exchangeDescrTV);
-        plnLayout = rootView.findViewById(R.id.pln_layout);
-        eurLayout = rootView.findViewById(R.id.eur_layout);
-        usdLayout = rootView.findViewById(R.id.usd_layout);
-        btc2Layout = rootView.findViewById(R.id.btc_layout2);
-        plnTV = rootView.findViewById(R.id.plnTextView);
-        usdTV = rootView.findViewById(R.id.usdTextView);
-        eurTV = rootView.findViewById(R.id.eurTextView);
-        btc2TV = rootView.findViewById(R.id.btc2TextView);
-
     }
 
-    private void initializeCryptocurrenciesRecyclerView(View rootView) {
-        LinkedList<Cryptocurrency> cryptocurrencyList = new LinkedList<>();
-        cryptocurrencyList.add(new Cryptocurrency(R.drawable.shadow_btc, R.drawable.btc_icon_24dp, "BTC"));
-        cryptocurrencyList.add(new Cryptocurrency(R.drawable.shadow_bcc, R.drawable.bcc_icon_24dp, "BCC"));
-        cryptocurrencyList.add(new Cryptocurrency(R.drawable.shadow_btg, R.drawable.btg_icon_24dp, "BTG"));
-        cryptocurrencyList.add(new Cryptocurrency(R.drawable.shadow_ltc, R.drawable.ltc_icon_24dp, "LTC"));
-        cryptocurrencyList.add(new Cryptocurrency(R.drawable.shadow_eth, R.drawable.eth_icon_24dp, "ETH"));
-        cryptocurrencyList.add(new Cryptocurrency(R.drawable.shadow_lsk, R.drawable.lsk_icon_24dp, "LSK"));
-        cryptocurrencyList.add(new Cryptocurrency(R.drawable.shadow_dash, R.drawable.dash_icon_24dp, "DASH"));
-        cryptocurrencyList.add(new Cryptocurrency(R.drawable.shadow_game, R.drawable.game_icon_24dp, "GAME"));
-        cryptocurrencyList.add(new Cryptocurrency(R.drawable.shadow_xin, R.drawable.xin_icon_24dp, "XIN"));
-        cryptocurrencyList.add(new Cryptocurrency(R.drawable.shadow_xrp,R.drawable.xrp_icon_24dp,"XRP"));
-        cryptocurrencyList.add(new Cryptocurrency(R.drawable.shadow_kzc, R.drawable.kzc_icon_24dp, "KZC"));
-        cryptocurrencyList.add(new Cryptocurrency(R.drawable.shadow_xmr, R.drawable.xmr_icon_24dp, "XMR"));
-        cryptocurrencyList.add(new Cryptocurrency(R.drawable.shadow_zec, R.drawable.zec_icon_24dp, "ZEC"));
-        cryptocurrencyList.add(new Cryptocurrency(R.drawable.shadow_gnt,R.drawable.gnt_icon_24dp,"GNT"));
-        cryptocurrencyList.add(new Cryptocurrency(R.drawable.shadow_fto,R.drawable.fto_icon_24dp,"FTO"));
-        cryptocurrencyList.add(new Cryptocurrency(R.drawable.shadow_omg,R.drawable.omg_icon_24dp,"OMG"));
-        cryptocurrencyList.add(new Cryptocurrency(R.drawable.shadow_pay,R.drawable.pay_icon_24dp,"PAY"));
-        cryptocurrencyList.add(new Cryptocurrency(R.drawable.shadow_rep,R.drawable.rep_icon_24dp,"REP"));
-        cryptocurrencyList.add(new Cryptocurrency(R.drawable.shadow_zrx,R.drawable.zrx_icon_24dp,"ZRX"));
-        cryptocurrencyList.add(new Cryptocurrency(R.drawable.shadow_bat,R.drawable.bat_icon_24dp,"BAT"));
-        cryptocurrencyList.add(new Cryptocurrency(R.drawable.shadow_neu,R.drawable.neu_icon_24dp,"NEU"));
-        cryptocurrencyList.add(new Cryptocurrency(R.drawable.shadow_trx,R.drawable.trx_icon_24dp,"TRX"));
+    private void initializeCurrenciesRecyclerView(View rootView) {
+        LinkedList<Currency> currencyList = new LinkedList<>();
+        currencyList.add(new Currency(R.drawable.shadow_pln, R.drawable.zl_icon_24dp, "PLN"));
+        currencyList.add(new Currency(R.drawable.shadow_usd, R.drawable.dollar_icon_24dp, "USD"));
+        currencyList.add(new Currency(R.drawable.shadow_eur, R.drawable.eur_icon_24dp, "EUR"));
+        currencyList.add(new Currency(R.drawable.shadow_btc, R.drawable.btc_icon_24dp, "BTC"));
+        currencyList.add(new Currency(R.drawable.shadow_usdc, R.drawable.usdc_icon_24dp, "USDC"));
 
-
-        RecyclerView recyclerView = rootView.findViewById(R.id.my_recycler_view);
+        RecyclerView recyclerView = rootView.findViewById(R.id.currency_recycler_view);
         recyclerView.setHasFixedSize(true);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        RecyclerView.Adapter mAdapter = new CryptocurrenciesAdapter(cryptocurrencyList, getActivity(), new AdapterClicker() {
+        RecyclerView.Adapter mAdapter = new CurrenciesAdapter(currencyList, getActivity(), new AdapterClicker() {
+            @Override
+            public void onClick(String currency) {
+                currentCurrency = currency;
+                updateRatesViews();
+            }
+        },currentCurrency);
+        recyclerView.setAdapter(mAdapter);
+
+    }
+
+    private void initializeCryptocurrenciesRecyclerView(View rootView) {
+        LinkedList<Currency> currencyList = new LinkedList<>();
+        currencyList.add(new Currency(R.drawable.shadow_btc, R.drawable.btc_icon_24dp, "BTC"));
+        currencyList.add(new Currency(R.drawable.shadow_bcc, R.drawable.bcc_icon_24dp, "BCC"));
+        currencyList.add(new Currency(R.drawable.shadow_btg, R.drawable.btg_icon_24dp, "BTG"));
+        currencyList.add(new Currency(R.drawable.shadow_ltc, R.drawable.ltc_icon_24dp, "LTC"));
+        currencyList.add(new Currency(R.drawable.shadow_eth, R.drawable.eth_icon_24dp, "ETH"));
+        currencyList.add(new Currency(R.drawable.shadow_lsk, R.drawable.lsk_icon_24dp, "LSK"));
+        currencyList.add(new Currency(R.drawable.shadow_dash, R.drawable.dash_icon_24dp, "DASH"));
+        currencyList.add(new Currency(R.drawable.shadow_game, R.drawable.game_icon_24dp, "GAME"));
+        currencyList.add(new Currency(R.drawable.shadow_xin, R.drawable.xin_icon_24dp, "XIN"));
+        currencyList.add(new Currency(R.drawable.shadow_xrp,R.drawable.xrp_icon_24dp,"XRP"));
+        currencyList.add(new Currency(R.drawable.shadow_kzc, R.drawable.kzc_icon_24dp, "KZC"));
+        currencyList.add(new Currency(R.drawable.shadow_xmr, R.drawable.xmr_icon_24dp, "XMR"));
+        currencyList.add(new Currency(R.drawable.shadow_zec, R.drawable.zec_icon_24dp, "ZEC"));
+        currencyList.add(new Currency(R.drawable.shadow_gnt,R.drawable.gnt_icon_24dp,"GNT"));
+        currencyList.add(new Currency(R.drawable.shadow_fto,R.drawable.fto_icon_24dp,"FTO"));
+        currencyList.add(new Currency(R.drawable.shadow_omg,R.drawable.omg_icon_24dp,"OMG"));
+        currencyList.add(new Currency(R.drawable.shadow_pay,R.drawable.pay_icon_24dp,"PAY"));
+        currencyList.add(new Currency(R.drawable.shadow_rep,R.drawable.rep_icon_24dp,"REP"));
+        currencyList.add(new Currency(R.drawable.shadow_zrx,R.drawable.zrx_icon_24dp,"ZRX"));
+        currencyList.add(new Currency(R.drawable.shadow_bat,R.drawable.bat_icon_24dp,"BAT"));
+        currencyList.add(new Currency(R.drawable.shadow_neu,R.drawable.neu_icon_24dp,"NEU"));
+        currencyList.add(new Currency(R.drawable.shadow_trx,R.drawable.trx_icon_24dp,"TRX"));
+        currencyList.add(new Currency(R.drawable.shadow_amlt,R.drawable.amlt_icon_24dp,"AMLT"));
+        currencyList.add(new Currency(R.drawable.shadow_exy,R.drawable.exy_icon_24dp,"EXY"));
+        currencyList.add(new Currency(R.drawable.shadow_bob,R.drawable.bob_icon_24dp,"BOB"));
+        currencyList.add(new Currency(R.drawable.shadow_lml,R.drawable.lml_icon_24dp,"LML"));
+        currencyList.add(new Currency(R.drawable.shadow_bsv,R.drawable.bsv_icon_24dp,"BSV"));
+        currencyList.add(new Currency(R.drawable.shadow_bcp,R.drawable.bcp_icon_24dp,"BCP"));
+        currencyList.add(new Currency(R.drawable.shadow_xbx,R.drawable.xbx_icon_24dp,"XBX"));
+        currencyList.add(new Currency(R.drawable.shadow_xlm,R.drawable.xlm_icon_24dp,"XLM"));
+
+
+
+
+        RecyclerView recyclerView = rootView.findViewById(R.id.cryptocurrency_recycler_view);
+        recyclerView.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+
+        RecyclerView.Adapter mAdapter = new CurrenciesAdapter(currencyList, getActivity(), new AdapterClicker() {
             @Override
             public void onClick(String cryptocurrency) {
                 currentCryptocurrency = cryptocurrency;
@@ -171,42 +169,6 @@ public class Tab1ExchangeRate extends Fragment {
         refreshBtt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateRatesViews();
-            }
-        });
-
-        plnLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setCurrencyClicked(plnTV);
-                currentCurrency = "PLN";
-                updateRatesViews();
-            }
-        });
-
-        usdLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setCurrencyClicked(usdTV);
-                currentCurrency = "USD";
-                updateRatesViews();
-            }
-        });
-
-        eurLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setCurrencyClicked(eurTV);
-                currentCurrency = "EUR";
-                updateRatesViews();
-            }
-        });
-
-        btc2Layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setCurrencyClicked(btc2TV);
-                currentCurrency = "BTC";
                 updateRatesViews();
             }
         });
@@ -254,20 +216,6 @@ public class Tab1ExchangeRate extends Fragment {
             refreshTimeValueTV.setText("-");
             exchangeDescrTV.setText("-");
         }
-    }
-
-    private void unclickCurrenciesLayouts() {
-        double dpToPx = getActivity().getResources().getDisplayMetrics().density;
-        plnTV.setPadding(0, 0, 0, (int) (dpToPx * 6));
-        usdTV.setPadding(0, 0, 0, (int) (dpToPx * 6));
-        eurTV.setPadding(0, 0, 0, (int) (dpToPx * 6));
-        btc2TV.setPadding(0, 0, 0, (int) (dpToPx * 6));
-    }
-
-    private void setCurrencyClicked(View view) {
-        unclickCurrenciesLayouts();
-        double dpToPx = getActivity().getResources().getDisplayMetrics().density;
-        view.setPadding(0, 0, 0, (int) (dpToPx * 18));
     }
 
     private void saveCryptocurrencyPreference(Context context, String cryptocurrency) {

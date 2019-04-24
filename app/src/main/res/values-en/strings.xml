@@ -11,6 +11,7 @@
     <string name="LTC">LTC</string>
     <string name="PLN">PLN</string>
     <string name="USD">USD</string>
+    <string name="USDC">USDC</string>
     <string name="action_settings">Settings</string>
     <string name="Currency">Currency:</string>
     <string name="Investment_amount">Investment amount:</string>
@@ -96,12 +97,12 @@
     <string name="Turn_off_the_alarm_to_delete">Turn off the alarm to delete!</string>
     <string name="Alarms_working">Alarms are running...</string>
     <string name="Alarms_are_running">Alarms are running...</string>
-    <string name="currency_not_supported">This currency isn\'t supported for that cryptocurrency!</string>
+    <string name="currency_not_supported">This currency isn\'t supported for that currency!</string>
     <string name="iWantToEarn">I want earn:</string>
     <string name="Sell_rate_title">Sell rate:</string>
     <string name="Refreshed">Refreshed</string>
-    <string name="calc1Instruction">"Calculate how much you will earn by buying and selling a cryptocurrency at certain rates for a certain amount of money. "</string>
+    <string name="calc1Instruction">"Calculate how much you will earn by buying and selling a currency at certain rates for a certain amount of money. "</string>
     <string name="Widget_attention_text">Widget refresh frequency is common for every widget.</string>
-    <string name="calc2Instruction">" Calculate at what rate to sell the cryptocurrency purchased at a specific buy rate in order to earn a given profit."</string>
+    <string name="calc2Instruction">" Calculate at what rate to sell the currency purchased at a specific buy rate in order to earn a given profit."</string>
 
 </resources>

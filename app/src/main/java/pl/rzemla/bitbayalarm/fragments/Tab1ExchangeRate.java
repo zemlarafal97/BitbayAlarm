@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import pl.rzemla.bitbayalarm.BitbayRequest;
 import pl.rzemla.bitbayalarm.R;
+import pl.rzemla.bitbayalarm.enums.CurrenciesType;
 import pl.rzemla.bitbayalarm.other.Currency;
 import pl.rzemla.bitbayalarm.other.Resources;
 import pl.rzemla.bitbayalarm.interfaces.AdapterClicker;
@@ -102,7 +103,8 @@ public class Tab1ExchangeRate extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        RecyclerView.Adapter mAdapter = new CurrenciesAdapter(currencyList, getActivity(), new AdapterClicker() {
+        RecyclerView.Adapter mAdapter = new CurrenciesAdapter(currencyList, getActivity(), CurrenciesType.CURRENCIES,
+        new AdapterClicker() {
             @Override
             public void onClick(String currency) {
                 currentCurrency = currency;
@@ -155,7 +157,7 @@ public class Tab1ExchangeRate extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        RecyclerView.Adapter mAdapter = new CurrenciesAdapter(currencyList, getActivity(), new AdapterClicker() {
+        RecyclerView.Adapter mAdapter = new CurrenciesAdapter(currencyList, getActivity(),CurrenciesType.CRYPTOCURRENCIES, new AdapterClicker() {
             @Override
             public void onClick(String cryptocurrency) {
                 currentCryptocurrency = cryptocurrency;

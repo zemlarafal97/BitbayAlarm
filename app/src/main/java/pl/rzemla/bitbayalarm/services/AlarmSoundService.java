@@ -1,6 +1,9 @@
 package pl.rzemla.bitbayalarm.services;
 
+import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.RemoteAction;
 import android.app.Service;
@@ -8,15 +11,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -32,6 +38,7 @@ import pl.rzemla.bitbayalarm.activities.MainActivity;
 import pl.rzemla.bitbayalarm.enums.AlarmMode;
 import pl.rzemla.bitbayalarm.other.Resources;
 import pl.rzemla.bitbayalarm.other.Song;
+import pl.rzemla.bitbayalarm.singletons.AlarmsSingleton;
 
 public class AlarmSoundService extends Service {
     private MediaPlayer player;
@@ -81,6 +88,7 @@ public class AlarmSoundService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+
         song = (Song) intent.getSerializableExtra("song");
         String cryptocurrency = intent.getStringExtra("cryptocurrency");
         String currency = intent.getStringExtra("currency");
@@ -90,6 +98,7 @@ public class AlarmSoundService extends Service {
 
         preparePlayer();
         prepareVibrator();
+
         showAlarmForegroundNotification(cryptocurrency,getAlarmModeText(mode),value, Resources.getCurrencySymbol(currency));
 
         final long[] mVibratePattern = new long[]{300, 1000, 800};
@@ -108,7 +117,7 @@ public class AlarmSoundService extends Service {
         return START_STICKY;
     }
 
-    private void showAlarmForegroundNotification(String cryptocurrency, String alarmType, double limit, String currencySymbol) {
+    private void showNormalAlarmForegroundNotification(String cryptocurrency, String alarmType, double limit, String currencySymbol) {
         Intent showTaskIntent = new Intent(this, MainActivity.class);
         showTaskIntent.setAction(Intent.ACTION_MAIN);
         showTaskIntent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -134,7 +143,54 @@ public class AlarmSoundService extends Service {
                 .setContentIntent(contentIntent)
                 .build();
         startForeground(PENDING_INTENT_REQUEST_CODE, notification);
+    }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void showOAlarmForegroundNotification(String cryptocurrency, String alarmType, double limit, String currencySymbol) {
+        Intent showTaskIntent = new Intent(this, MainActivity.class);
+        showTaskIntent.setAction(Intent.ACTION_MAIN);
+        showTaskIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        showTaskIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        PendingIntent contentIntent = PendingIntent.getActivity(this,PENDING_INTENT_REQUEST_CODE,showTaskIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+        String NOTIFICATION_CHANNEL_ID = "pl.rzemla.bitbayalarm";
+        String channelName = "Alarm Tracking Service";
+        NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,channelName, NotificationManager.IMPORTANCE_HIGH);
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        assert manager != null;
+        manager.createNotificationChannel(channel);
+
+        DecimalFormat df = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.US));
+        df.setMaximumFractionDigits(10);
+
+        RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.turn_off_alarm_notification);
+        contentView.setTextViewText(R.id.alarmTV,getString(R.string.Alarm_title));
+        contentView.setTextViewText(R.id.descriptionValueTV, cryptocurrency + " " +alarmType + " " + df.format(limit) + currencySymbol);
+
+        Intent turnOffAlarmIntent = new Intent(this,TurnOffAlarm.class);
+        PendingIntent turnOffAlarmNotificationIntent = PendingIntent.getBroadcast(this,PENDING_INTENT_REQUEST_CODE,turnOffAlarmIntent,0);
+        contentView.setOnClickPendingIntent(R.id.turnOffAlarmNotifB,turnOffAlarmNotificationIntent);
+
+        Notification.Builder notificationBuilder = new Notification.Builder(this,NOTIFICATION_CHANNEL_ID);
+        Notification notification = notificationBuilder.setOngoing(true)
+                .setSmallIcon(R.drawable.dollarico)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.bitbayico256))
+                .setCustomContentView(contentView)
+                .setContentIntent(contentIntent)
+                .build();
+
+
+        startForeground(PENDING_INTENT_REQUEST_CODE, notification);
+    }
+
+    private void showAlarmForegroundNotification(String cryptocurrency, String alarmType, double limit, String currencySymbol) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            showOAlarmForegroundNotification(cryptocurrency,alarmType,limit,currencySymbol);
+        } else {
+            showNormalAlarmForegroundNotification(cryptocurrency,alarmType,limit,currencySymbol);
+        }
     }
 
     public static class TurnOffAlarm extends BroadcastReceiver {
@@ -142,6 +198,10 @@ public class AlarmSoundService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d("TurnOffAlarm","received!");
+
+            if(AlarmsSingleton.getInstance(context).isAnyAlarmRunning()) {
+                context.startService(new Intent(context,AlarmTrackingService.class));
+            }
             context.stopService(new Intent(context,AlarmSoundService.class));
         }
     }
